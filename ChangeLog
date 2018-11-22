@@ -1,3 +1,8 @@
+2018-11-22 Franz Holzinger <franz@ttproducts.de>
+
+	* New marker: add the marker ###RATING_VALUE###
+	* New extension comment: TYPO3 mailinglists are not used so often. It is better to be notified by typo3.slack.com.
+
 2014-03-19 v2.0.3 Leonie Philine Bitto <leonie@netcreators.nl>
 
 	* New version number for renewed TER upload, including the bugfixes

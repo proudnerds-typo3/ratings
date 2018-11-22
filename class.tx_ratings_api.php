@@ -189,7 +189,6 @@ class tx_ratings_api {
 			$rating_value = 0;
 			$rating_str = $language->sL('LLL:EXT:ratings/locallang.xml:api_not_rated');
 		}
-
 		if ($conf['mode'] == 'static' || (!$conf['disableIpCheck'] && $this->isVoted($ref))) {
 			$subTemplate = $this->cObj->getSubpart($template, '###TEMPLATE_RATING_STATIC###');
 			$links = '';
@@ -228,6 +227,7 @@ class tx_ratings_api {
 			'###TEXT_ALREADY_RATED###' => $language->sL('LLL:EXT:ratings/locallang.xml:api_already_rated'),
 			'###BAR_WIDTH###' => $this->getBarWidth($rating_value, $conf),
 			'###RATING###' => $rating_str,
+			'###RATING_VALUE###' => $rating_value,
 			'###TEXT_RATING_TIP###' => $language->sL('LLL:EXT:ratings/locallang.xml:api_tip'),
 			'###SITE_REL_PATH###' => $siteRelPath,
 			'###VOTE_LINKS###' => $links,
