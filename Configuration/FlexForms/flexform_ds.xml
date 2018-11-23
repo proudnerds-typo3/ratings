@@ -27,7 +27,7 @@
 					<config>
 						<type>input</type>
 						<eval>trim,required</eval>
-						<default>EXT:ratings/res/pi1_template.html</default>
+						<default>EXT:ratings/Resources/Private/Templates/ratings.html</default>
 						<wizards type="array">
 							<_PADDING>2</_PADDING>
 							<link type="array">

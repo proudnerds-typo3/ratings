@@ -1,5 +1,7 @@
 2018-11-23 Franz Holzinger <franz@ttproducts.de>
 
+    * move res/ratings.html -> Resources/Private/Templates/ratings.html
+    * move res/ratingsMicrodata.html -> Resources/Private/Templates/ratingsMicrodata.html
     * fix exception 1437750231: replace flexform script with wizard_element_browser
     * bugfix in tt_content.php
     * move pi1/flexform_ds.xml -> Configuration/FlexForms/flexform_ds.xml
