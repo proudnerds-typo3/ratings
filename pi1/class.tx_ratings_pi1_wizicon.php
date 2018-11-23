@@ -57,12 +57,12 @@ class tx_ratings_pi1_wizicon {
 	}
 
 	/**
-	 * Reads the [extDir]/locallang.xml and returns the $LOCAL_LANG array found in that file.
+	 * Reads the [extDir]/Resources/Private/Language/locallang.xlf and returns the $LOCAL_LANG array found in that file.
 	 *
 	 * @return array The array with language labels
 	 */
 	function includeLocalLang()	{
-		$llFile = t3lib_extMgm::extPath('ratings').'locallang.xml';
+		$llFile = t3lib_extMgm::extPath('ratings') . 'Resources/Private/Language/locallang.xlf';
 		$LOCAL_LANG = t3lib_div::readLLfile($llFile, $GLOBALS['LANG']->lang);
 
 		return $LOCAL_LANG;

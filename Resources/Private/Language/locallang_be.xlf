@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2018-11-23T15:36:23Z" product-name="ratings">
+		<header/>
+		<body>
+			<trans-unit id="tt_content.tx_ratings_pi1.storage.page" xml:space="preserve">
+				<source>Storage page for rating records:</source>
+			</trans-unit>
+			<trans-unit id="tt_content.tx_ratings_pi1.template_file" xml:space="preserve">
+				<source>Template file to use:</source>
+			</trans-unit>
+			<trans-unit id="no_ts_template" xml:space="preserve">
+				<source>Error: TS template from ratings extension is not included to site TS template</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

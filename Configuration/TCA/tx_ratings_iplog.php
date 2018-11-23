@@ -3,7 +3,7 @@ if (!defined ('TYPO3_MODE')) die('Access denied.');
 
 $result = array (
     'ctrl' => array (
-        'title'     => 'LLL:EXT:ratings/locallang_db.xml:tx_ratings_iplog',
+        'title'     => 'LLL:EXT:ratings/Resources/Private/Language/locallang_tca.xlf:tx_ratings_iplog',
         'label'     => 'reference',
         'tstamp'    => 'tstamp',
         'crdate'    => 'crdate',
@@ -17,7 +17,7 @@ $result = array (
     'columns' => array (
         'reference' => array (
             'exclude' => 1,
-            'label' => 'LLL:EXT:ratings/locallang_db.xml:tx_ratings_iplog.reference',
+            'label' => 'LLL:EXT:ratings/Resources/Private/Language/locallang_tca.xlf:tx_ratings_iplog.reference',
             'config' => array (
                 'type' => 'group',
                 'internal_type' => 'db',
@@ -29,7 +29,7 @@ $result = array (
         ),
         'crdate' => array (
             'exclude' => 1,
-            'label' => 'LLL:EXT:ratings/locallang_db.xml:tx_ratings_iplog.crdate',
+            'label' => 'LLL:EXT:ratings/Resources/Private/Language/locallang_tca.xlf:tx_ratings_iplog.crdate',
             'config' => array (
                 'type' => 'input',
                 'size' => '22',
@@ -40,7 +40,7 @@ $result = array (
         ),
         'ip' => array (
             'exclude' => 1,
-            'label' => 'LLL:EXT:ratings/locallang_db.xml:tx_ratings_iplog.ip',
+            'label' => 'LLL:EXT:ratings/Resources/Private/Language/locallang_tca.xlf:tx_ratings_iplog.ip',
             'config' => array (
                 'type' => 'input',
                 'size' => '22',

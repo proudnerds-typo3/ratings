@@ -5,7 +5,7 @@ defined('TYPO3_MODE') or die('Access denied.');
 $tempColumns = array (
     'tx_ratings_enable' => Array (
         'exclude' => 1,
-        'label' => 'LLL:EXT:ratings/locallang_db.xml:tt_news.tx_ratings_enable',
+        'label' => 'LLL:EXT:ratings/Resources/Private/Language/locallang_tca.xlf:tt_news.tx_ratings_enable',
         'config' => array (
             'type'     => 'check',
             'items'    => array(

@@ -1,5 +1,4 @@
 <?php
-
 defined('TYPO3_MODE') or die('Access denied.');
 
 $tx_ratings_sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ratings']);

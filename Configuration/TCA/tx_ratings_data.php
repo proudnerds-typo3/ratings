@@ -3,7 +3,7 @@ if (!defined ('TYPO3_MODE')) die('Access denied.');
 
 $result = array (
     'ctrl' => array (
-        'title'     => 'LLL:EXT:ratings/locallang_db.xml:tx_ratings_data',
+        'title'     => 'LLL:EXT:ratings/Resources/Private/Language/locallang_tca.xlf:tx_ratings_data',
         'label'     => 'reference',
         'tstamp'    => 'tstamp',
         'crdate'    => 'crdate',
@@ -17,7 +17,7 @@ $result = array (
     'columns' => array (
         'reference' => array (
             'exclude' => 1,
-            'label' => 'LLL:EXT:ratings/locallang_db.xml:tx_ratings_data.reference',
+            'label' => 'LLL:EXT:ratings/Resources/Private/Language/locallang_tca.xlf:tx_ratings_data.reference',
             'config' => array (
                 'type' => 'group',
                 'internal_type' => 'db',
@@ -29,7 +29,7 @@ $result = array (
         ),
         'rating' => array (
             'exclude' => 1,
-            'label' => 'LLL:EXT:ratings/locallang_db.xml:tx_ratings_data.rating',
+            'label' => 'LLL:EXT:ratings/Resources/Private/Language/locallang_tca.xlf:tx_ratings_data.rating',
             'config' => array (
                 'type' => 'input',
                 'size' => '4',
@@ -45,7 +45,7 @@ $result = array (
         ),
         'vote_count' => array (
             'exclude' => 1,
-            'label' => 'LLL:EXT:ratings/locallang_db.xml:tx_ratings_data.vote_count',
+            'label' => 'LLL:EXT:ratings/Resources/Private/Language/locallang_tca.xlf:tx_ratings_data.vote_count',
             'config' => array (
                 'type' => 'input',
                 'size' => '4',

@@ -1,5 +1,9 @@
 2018-11-23 Franz Holzinger <franz@ttproducts.de>
 
+    * move locallang.xml -> Resources/Private/Language/locallang.xlf and Resources/Private/Language/de.locallang.xlf
+    * move locallang_ajax.xml -> Resources/Private/Language/locallang_ajax.xlf
+    * move locallang_db.xml -> Resources/Private/Language/locallang_tca.xlf
+    * move pi1/locallang.xml -> Resources/Private/Language/locallang_be.xlf
     * move static/Ratings/constants.txt -> Configuration/TypoScript/constants.txt
     * move static/Ratings/setup.txt -> Configuration/TypoScript/setup.txt
     * extract the file tt_content.php from ext_tables.php
@@ -10,8 +14,8 @@
     * extract the files tx_ratings_iplog.php from ext_tables.php and tca.php
     * extract the files tx_ratings_data.php from ext_tables.php and tca.php
     * Replace t3lib_extMgm by \TYPO3\CMS\Core\Utility\ExtensionManagementUtility
-    * Do not call t3lib_div::loadTCA.
-    * Do not require t3lib_extMgm::isLoaded("tt_news") in ext_localconf.php.
+    * deprecation: Do not call t3lib_div::loadTCA.
+    * deprecation: Do not require t3lib_extMgm::isLoaded("tt_news") in ext_localconf.php.
     * Ready for TYPO3 7 and 8
     * Remove the modfunc1 backend module which had no functionality.
     * Replace the variable $_EXTKEY by 'ratings' because this variable will not be supported by TYPO3 in the future.

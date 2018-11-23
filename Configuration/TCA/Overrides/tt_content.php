@@ -9,7 +9,7 @@ $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['ratings' . '
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
     array(
-        'LLL:EXT:ratings/locallang_db.xml:tt_content.list_type_pi1',
+        'LLL:EXT:ratings/Resources/Private/Language/locallang_tca.xlf:tt_content.list_type_pi1',
         'ratings',
         'EXT:ratings/ext_icon.gif'
     ),
