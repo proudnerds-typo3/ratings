@@ -1,5 +1,6 @@
 2018-11-23 Franz Holzinger <franz@ttproducts.de>
 
+    * move pi1/flexform_ds.xml -> Configuration/FlexForms/flexform_ds.xml
     * core change: tslib_cObj -> \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
     * core change: t3lib_div -> \TYPO3\CMS\Core\Utility\GeneralUtility
     * move locallang.xml -> Resources/Private/Language/locallang.xlf and Resources/Private/Language/de.locallang.xlf

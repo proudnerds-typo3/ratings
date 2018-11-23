@@ -4,9 +4,6 @@
 		<langChildren>0</langChildren>
 	</meta>
 	<ROOT>
-		<!--TCEforms>
-			<cshFile>LLL:EXT:ratings/Resources/Private/Language/locallang_csh.xml</cshFile>
-		</TCEforms-->
 		<type>array</type>
 		<el>
 			<storagePid>

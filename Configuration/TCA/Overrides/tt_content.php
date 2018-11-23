@@ -5,7 +5,7 @@ defined('TYPO3_MODE') or die('Access denied.');
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['ratings' . '_pi1'] = 'layout,select_key,pages';
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['ratings' . '_pi1'] = 'pi_flexform';
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue('ratings' . '_pi1', 'FILE:EXT:ratings/pi1/flexform_ds.xml');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue('ratings' . '_pi1', 'FILE:EXT:ratings/Configuration/FlexForms/flexform_ds.xml');
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
     array(
