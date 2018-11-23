@@ -25,20 +25,7 @@ $tx_ratings_sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf'][
 $tx_ratings_debug_mode_disabled = is_array($tx_ratings_sysconf) && !intval($tx_ratings_sysconf['debugMode']);
 
 
-$TCA['tx_ratings_iplog'] = array (
-	'ctrl' => array (
-		'title'     => 'LLL:EXT:ratings/locallang_db.xml:tx_ratings_iplog',
-		'label'     => 'reference',
-		'tstamp'    => 'tstamp',
-		'crdate'    => 'crdate',
-		'cruser_id' => 'cruser_id',
-		'default_sortby' => 'ORDER BY crdate DESC',
-		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ratings').'tca.php',
-		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('ratings').'icon_tx_ratings_iplog.gif',
-		'hideTable'	=> $tx_ratings_debug_mode_disabled,
-		'readOnly'	=> $tx_ratings_debug_mode_disabled,
-	),
-);
+
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_ratings_data');
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_ratings_iplog');

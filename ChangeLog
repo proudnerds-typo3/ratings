@@ -1,5 +1,6 @@
 2018-11-23 Franz Holzinger <franz@ttproducts.de>
 
+    * extract the files tx_ratings_iplog.php from ext_tables.php and tca.php
     * extract the files tx_ratings_data.php from ext_tables.php and tca.php
     * Replace t3lib_extMgm by \TYPO3\CMS\Core\Utility\ExtensionManagementUtility
     * Do not call t3lib_div::loadTCA.
