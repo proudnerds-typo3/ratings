@@ -1,11 +1,6 @@
 <?php
-if (!defined ('TYPO3_MODE')) {
-    die ('Access denied.');
-}
+if (!defined ('TYPO3_MODE')) die('Access denied.');
 
-// ******************************************************************
-// These are the credit cards data used for orders
-// ******************************************************************
 $result = array (
 
     'ctrl' => array (
@@ -18,7 +13,7 @@ $result = array (
         'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('ratings').'icon_tx_ratings_data.gif'
     ),
     'interface' => array (
-        'showRecordFieldList' => 'cc_number,owner_name,cc_type,cvv2,endtime'
+        'showRecordFieldList' => 'reference,rating,vote_count'
     ),
     'columns' => array (
         'reference' => array (
