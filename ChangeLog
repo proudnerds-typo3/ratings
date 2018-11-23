@@ -1,5 +1,7 @@
 2018-11-23 Franz Holzinger <franz@ttproducts.de>
 
+    * core change: tslib_cObj -> \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
+    * core change: t3lib_div -> \TYPO3\CMS\Core\Utility\GeneralUtility
     * move locallang.xml -> Resources/Private/Language/locallang.xlf and Resources/Private/Language/de.locallang.xlf
     * move locallang_ajax.xml -> Resources/Private/Language/locallang_ajax.xlf
     * move locallang_db.xml -> Resources/Private/Language/locallang_tca.xlf

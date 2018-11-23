@@ -55,9 +55,9 @@ class Api {
     *
     */
     public function __construct() {
-        $this->cObj = t3lib_div::makeInstance('tslib_cObj');
+        $this->cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class)
         $this->cObj->start('', '');
-        $this->databaseHandle = $GLOBALS['TYPO3_DB'];
+        $this->databaseHandle = $this->getDatabaseConnection();
     }
 
     /**
@@ -73,7 +73,8 @@ class Api {
             $conf = $this->getDefaultConfig();
         }
         $rating = $this->getRatingInfo($ref);
-        return max(0, 100*(floatval($rating['rating'])-intval($conf['minValue']))/(intval($conf['maxValue'])-intval($conf['minValue'])));
+        $result = max(0, 100 * (floatval($rating['rating']) - intval($conf['minValue'])) / (intval($conf['maxValue']) - intval($conf['minValue'])));
+        return $result;
     }
 
     /**
@@ -107,8 +108,9 @@ class Api {
             // Called from ajax
             $template = @file_get_contents(PATH_site . $conf['templateFile']);
         }
+
         if (!$template) {
-            t3lib_div::devLog('Unable to load template code from "' . $conf['templateFile'] . '"', 'ratings', 3);
+            GeneralUtility::devLog('Unable to load template code from "' . $conf['templateFile'] . '"', 'ratings', 3);
             return '';
         }
         return $this->generateRatingContent($ref, $template, $conf);
@@ -136,7 +138,7 @@ class Api {
         list($rec) = $this->databaseHandle->exec_SELECTgetRows('COUNT(*) AS t',
                     'tx_ratings_iplog',
                     ' reference=' . $this->databaseHandle->fullQuoteStr($ref, 'tx_ratings_iplog') .
-                    ' AND ip='. $this->databaseHandle->fullQuoteStr($this->getCurrentIp(), 'tx_ratings_iplog') .
+                    ' AND ip=' . $this->databaseHandle->fullQuoteStr($this->getCurrentIp(), 'tx_ratings_iplog') .
                     $this->enableFields('tx_ratings_iplog'));
         return ($rec['t'] > 0);
     }
@@ -150,7 +152,7 @@ class Api {
     * @return	int
     */
     protected function getBarWidth($rating, $conf) {
-        return intval($conf['ratingImageWidth']*$rating);
+        return intval($conf['ratingImageWidth'] * $rating);
     }
 
     /**
@@ -161,8 +163,8 @@ class Api {
     */
     protected function getRatingInfo($ref) {
         $recs = $this->databaseHandle->exec_SELECTgetRows('rating,vote_count',
-                    'tx_ratings_data',
-                    ' reference=' . $this->databaseHandle->fullQuoteStr($ref, 'tx_ratings_data') . $this->enableFields('tx_ratings_data'));
+            'tx_ratings_data',
+            ' reference=' . $this->databaseHandle->fullQuoteStr($ref, 'tx_ratings_data') . $this->enableFields('tx_ratings_data'));
         return (count($recs) ? $recs[0] : array('rating' => 0, 'vote_count' => 0));
     }
 
@@ -180,7 +182,7 @@ class Api {
             $language = &$GLOBALS['LANG'];
         }
         else {
-            $language = t3lib_div::makeInstance('language');
+            $language = GeneralUtility::makeInstance('language');
             $language->init($GLOBALS['TSFE']->lang);
         }
         /* @var $language language */
@@ -256,8 +258,7 @@ class Api {
             return $this->cObj->enableFields($tableName);
         }
         /* @var $sys_page t3lib_pageSelect */
-        $sys_page = t3lib_div::makeInstance('t3lib_pageSelect');
-        t3lib_div::loadTCA($tableName);
+        $sys_page = GeneralUtility::makeInstance('t3lib_pageSelect');
 
         return $sys_page->enableFields($tableName);
     }
