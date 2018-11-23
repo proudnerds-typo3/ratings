@@ -33,8 +33,8 @@ $TCA['tx_ratings_data'] = array (
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'default_sortby' => 'ORDER BY crdate DESC',
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_ratings_data.gif',
+		'dynamicConfigFile' => t3lib_extMgm::extPath('ratings').'tca.php',
+		'iconfile'          => t3lib_extMgm::extRelPath('ratings').'icon_tx_ratings_data.gif',
 		'hideTable'	=> $tx_ratings_debug_mode_disabled,
 		'readOnly'	=> $tx_ratings_debug_mode_disabled,
 	),
@@ -48,8 +48,8 @@ $TCA['tx_ratings_iplog'] = array (
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'default_sortby' => 'ORDER BY crdate DESC',
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY).'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY).'icon_tx_ratings_iplog.gif',
+		'dynamicConfigFile' => t3lib_extMgm::extPath('ratings').'tca.php',
+		'iconfile'          => t3lib_extMgm::extRelPath('ratings').'icon_tx_ratings_iplog.gif',
 		'hideTable'	=> $tx_ratings_debug_mode_disabled,
 		'readOnly'	=> $tx_ratings_debug_mode_disabled,
 	),
@@ -62,15 +62,15 @@ unset($tx_ratings_debug_mode_disabled);
 unset($tx_ratings_sysconf);
 
 t3lib_div::loadTCA('tt_content');
-$TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY.'_pi1'] = 'layout,select_key,pages';
-$TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY.'_pi1'] = 'pi_flexform';
-t3lib_extMgm::addPiFlexFormValue($_EXTKEY .'_pi1', 'FILE:EXT:ratings/pi1/flexform_ds.xml');
+$TCA['tt_content']['types']['list']['subtypes_excludelist']['ratings' . '_pi1'] = 'layout,select_key,pages';
+$TCA['tt_content']['types']['list']['subtypes_addlist']['ratings' . '_pi1'] = 'pi_flexform';
+t3lib_extMgm::addPiFlexFormValue('ratings' .'_pi1', 'FILE:EXT:ratings/pi1/flexform_ds.xml');
 
-t3lib_extMgm::addPlugin(array('LLL:EXT:ratings/locallang_db.xml:tt_content.list_type_pi1', $_EXTKEY.'_pi1'),'list_type');
+t3lib_extMgm::addPlugin(array('LLL:EXT:ratings/locallang_db.xml:tt_content.list_type_pi1', 'ratings' . '_pi1'),'list_type');
 
 if (TYPO3_MODE=='BE') {
-	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_ratings_pi1_wizicon'] = t3lib_extMgm::extPath($_EXTKEY).'pi1/class.tx_ratings_pi1_wizicon.php';
+	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_ratings_pi1_wizicon'] = t3lib_extMgm::extPath('ratings') . 'pi1/class.tx_ratings_pi1_wizicon.php';
 }
 
-t3lib_extMgm::addStaticFile($_EXTKEY,'static/Ratings/', 'Ratings');
-?>
+t3lib_extMgm::addStaticFile('ratings', 'static/Ratings/', 'Ratings');
+

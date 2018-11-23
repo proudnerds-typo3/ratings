@@ -1,6 +1,7 @@
 2018-11-23 Franz Holzinger <franz@ttproducts.de>
 
     * Remove the modfunc1 backend module which had no functionality.
+    * Replace the variable $_EXTKEY by 'ratings' because this variable will not be supported by TYPO3 in the future.
 
 2018-11-22 Franz Holzinger <franz@ttproducts.de>
 
