@@ -24,20 +24,6 @@ if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('tt_news')) {
 $tx_ratings_sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ratings']);
 $tx_ratings_debug_mode_disabled = is_array($tx_ratings_sysconf) && !intval($tx_ratings_sysconf['debugMode']);
 
-$TCA['tx_ratings_data'] = array (
-	'ctrl' => array (
-		'title'     => 'LLL:EXT:ratings/locallang_db.xml:tx_ratings_data',
-		'label'     => 'reference',
-		'tstamp'    => 'tstamp',
-		'crdate'    => 'crdate',
-		'cruser_id' => 'cruser_id',
-		'default_sortby' => 'ORDER BY crdate DESC',
-		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ratings').'tca.php',
-		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('ratings').'icon_tx_ratings_data.gif',
-		'hideTable'	=> $tx_ratings_debug_mode_disabled,
-		'readOnly'	=> $tx_ratings_debug_mode_disabled,
-	),
-);
 
 $TCA['tx_ratings_iplog'] = array (
 	'ctrl' => array (
