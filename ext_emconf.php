@@ -8,7 +8,7 @@ $EM_CONF[$_EXTKEY] = array (
 	'title' => 'Ratings',
 	'description' => 'Modern AJAX-based ratings system. Public free support is provided only through typo3.slack.com! Contact by e-mail for commercial support.',
 	'category' => 'plugin',
-	'version' => '2.0.3',
+	'version' => '3.0.0',
 	'state' => 'beta',
 	'uploadfolder' => 0,
 	'createDirs' => '',
@@ -20,8 +20,8 @@ $EM_CONF[$_EXTKEY] = array (
 	array (
 		'depends' => 
 		array (
-			'php' => '5.3.0-5.5.99',
-			'typo3' => '6.0.0-6.2.99',
+			'php' => '5.5.0-7.99.99',
+            'typo3' => '6.2.0-9.3.99'
 		),
 		'conflicts' => 
 		array (
