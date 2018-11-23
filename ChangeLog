@@ -1,5 +1,12 @@
+2018-11-23 Franz Holzinger <franz@ttproducts.de>
+
+    * Remove the modfunc1 backend module which had no functionality.
+
 2018-11-22 Franz Holzinger <franz@ttproducts.de>
 
+    * move class.tx_ratings_ajax.php -> Classes/Api/Ajax.php
+    * move class.tx_ratings_api.php -> Classes/Api/Api.php
+    * move class.tx_ratings_ttnews.php -> Classes/Api/TtNews.php
 	* New marker: add the marker ###RATING_VALUE###
 	* New extension comment: TYPO3 mailinglists are not used so often. It is better to be notified by typo3.slack.com.
 

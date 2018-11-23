@@ -15,7 +15,6 @@
 			<label index="tx_ratings_iplog.crdate">Rated on:</label>
 			<label index="tx_ratings_iplog.ip">IP address:</label>
 			<label index="tt_content.list_type_pi1">Ratings</label>
-			<label index="moduleFunction.tx_ratings_modfunc1">Ratings</label>
 			<label index="tt_news.tx_ratings_enable">Enable ratings</label>
 		</languageKey>
 		<languageKey index="default" type="array">
@@ -28,7 +27,6 @@
 			<label index="tx_ratings_iplog.crdate">Bewertet am:</label>
 			<label index="tx_ratings_iplog.ip">IP-Adresse:</label>
 			<label index="tt_content.list_type_pi1">Bewertungen</label>
-			<label index="moduleFunction.tx_ratings_modfunc1">Bewertungen</label>
 			<label index="tt_news.tx_ratings_enable">Bewertung freischalten</label>
 		</languageKey>
 	</data>
