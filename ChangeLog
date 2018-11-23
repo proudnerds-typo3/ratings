@@ -1,5 +1,8 @@
 2018-11-23 Franz Holzinger <franz@ttproducts.de>
 
+    * Replace t3lib_extMgm by \TYPO3\CMS\Core\Utility\ExtensionManagementUtility
+    * Do not call t3lib_div::loadTCA.
+    * Do not require t3lib_extMgm::isLoaded("tt_news") in ext_localconf.php.
     * Ready for TYPO3 7 and 8
     * Remove the modfunc1 backend module which had no functionality.
     * Replace the variable $_EXTKEY by 'ratings' because this variable will not be supported by TYPO3 in the future.

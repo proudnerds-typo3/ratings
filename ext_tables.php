@@ -1,7 +1,7 @@
 <?php
 if (!defined ('TYPO3_MODE')) die('Access denied.');
 
-if (t3lib_extMgm::isLoaded('tt_news')) {
+if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('tt_news')) {
 	// New columns
 	$tempColumns = array (
 		'tx_ratings_enable' => Array (
@@ -17,9 +17,8 @@ if (t3lib_extMgm::isLoaded('tt_news')) {
 		),
 	);
 
-	t3lib_div::loadTCA('tt_news');
-	t3lib_extMgm::addTCAcolumns('tt_news', $tempColumns, 1);
-	t3lib_extMgm::addToAllTCAtypes('tt_news', 'tx_ratings_enable;;;;1-1-1');
+	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('tt_news', $tempColumns, 1);
+	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('tt_news', 'tx_ratings_enable;;;;1-1-1');
 }
 
 $tx_ratings_sysconf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ratings']);
@@ -33,8 +32,8 @@ $TCA['tx_ratings_data'] = array (
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'default_sortby' => 'ORDER BY crdate DESC',
-		'dynamicConfigFile' => t3lib_extMgm::extPath('ratings').'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath('ratings').'icon_tx_ratings_data.gif',
+		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ratings').'tca.php',
+		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('ratings').'icon_tx_ratings_data.gif',
 		'hideTable'	=> $tx_ratings_debug_mode_disabled,
 		'readOnly'	=> $tx_ratings_debug_mode_disabled,
 	),
@@ -48,29 +47,28 @@ $TCA['tx_ratings_iplog'] = array (
 		'crdate'    => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'default_sortby' => 'ORDER BY crdate DESC',
-		'dynamicConfigFile' => t3lib_extMgm::extPath('ratings').'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath('ratings').'icon_tx_ratings_iplog.gif',
+		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ratings').'tca.php',
+		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('ratings').'icon_tx_ratings_iplog.gif',
 		'hideTable'	=> $tx_ratings_debug_mode_disabled,
 		'readOnly'	=> $tx_ratings_debug_mode_disabled,
 	),
 );
 
-t3lib_extMgm::allowTableOnStandardPages('tx_ratings_data');
-t3lib_extMgm::allowTableOnStandardPages('tx_ratings_iplog');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_ratings_data');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_ratings_iplog');
 
 unset($tx_ratings_debug_mode_disabled);
 unset($tx_ratings_sysconf);
 
-t3lib_div::loadTCA('tt_content');
 $TCA['tt_content']['types']['list']['subtypes_excludelist']['ratings' . '_pi1'] = 'layout,select_key,pages';
 $TCA['tt_content']['types']['list']['subtypes_addlist']['ratings' . '_pi1'] = 'pi_flexform';
-t3lib_extMgm::addPiFlexFormValue('ratings' .'_pi1', 'FILE:EXT:ratings/pi1/flexform_ds.xml');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue('ratings' .'_pi1', 'FILE:EXT:ratings/pi1/flexform_ds.xml');
 
-t3lib_extMgm::addPlugin(array('LLL:EXT:ratings/locallang_db.xml:tt_content.list_type_pi1', 'ratings' . '_pi1'),'list_type');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(array('LLL:EXT:ratings/locallang_db.xml:tt_content.list_type_pi1', 'ratings' . '_pi1'),'list_type');
 
 if (TYPO3_MODE=='BE') {
-	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_ratings_pi1_wizicon'] = t3lib_extMgm::extPath('ratings') . 'pi1/class.tx_ratings_pi1_wizicon.php';
+	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_ratings_pi1_wizicon'] = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ratings') . 'pi1/class.tx_ratings_pi1_wizicon.php';
 }
 
-t3lib_extMgm::addStaticFile('ratings', 'static/Ratings/', 'Ratings');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile('ratings', 'static/Ratings/', 'Ratings');
 
