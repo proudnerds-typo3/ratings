@@ -2,7 +2,6 @@
 if (!defined ('TYPO3_MODE')) die('Access denied.');
 
 $result = array (
-
     'ctrl' => array (
         'title'     => 'LLL:EXT:ratings/locallang_db.xml:tx_ratings_data',
         'label'     => 'reference',
@@ -10,7 +9,7 @@ $result = array (
         'crdate'    => 'crdate',
         'cruser_id' => 'cruser_id',
         'default_sortby' => 'ORDER BY crdate DESC',
-        'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('ratings').'icon_tx_ratings_data.gif'
+        'iconfile'  =>  'EXT:ratings/Resources/Public/Icons/icon_tx_ratings_data.gif'
     ),
     'interface' => array (
         'showRecordFieldList' => 'reference,rating,vote_count'
@@ -69,7 +68,6 @@ $result = array (
         '1' => array('showitem' => '')
     )
 );
-
 
 return $result;
 
