@@ -1,6 +1,6 @@
 <?php
 
-namespace Netcreators\Ratings\Api;
+namespace Netcreators\Ratings\Hooks;
 
 /***************************************************************
 *  Copyright notice

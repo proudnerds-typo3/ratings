@@ -1,5 +1,6 @@
 2018-11-23 Franz Holzinger <franz@ttproducts.de>
 
+    * bug fixes: tt_news hook and register plugin controller
     * move res/ratings.html -> Resources/Private/Templates/ratings.html
     * move res/ratingsMicrodata.html -> Resources/Private/Templates/ratingsMicrodata.html
     * fix exception 1437750231: replace flexform script with wizard_element_browser
