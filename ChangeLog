@@ -1,5 +1,6 @@
 2018-11-23 Franz Holzinger <franz@ttproducts.de>
 
+    * extract the file tt_news.php from ext_tables.php
     * move icon_tx_ratings_data.gif -> Resources/Public/Icons/icon_tx_ratings_data.gif
     * move icon_tx_ratings_iplog.gif -> Resources/Public/Icons/icon_tx_ratings_iplog.gif
     * add the EidRunner.php script
