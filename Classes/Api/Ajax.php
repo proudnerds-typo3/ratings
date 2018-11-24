@@ -1,6 +1,6 @@
 <?php
 
-namespace Resources/Private/Language/;
+namespace Netcreators\Ratings\Api;
 
 /***************************************************************
 *  Copyright notice
@@ -46,8 +46,7 @@ class Ajax {
     public function __construct() {
         $data_str = GeneralUtility::_GP('data');
         $data = unserialize(base64_decode($data_str));
-        /** @var language $language */
-        $language = GeneralUtility::makeInstance('language');
+        $language = \TYPO3\CMS\Lang\Controller\LanguageController::getLanguageService();
         $language->init($data['lang'] ? $data['lang'] : 'default');
         $language->includeLLFile('EXT:ratings/Resources/Private/Language/locallang_ajax.xlf');
 

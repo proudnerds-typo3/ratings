@@ -3,11 +3,11 @@
 	<file source-language="en" target-language="de" datatype="plaintext" original="messages" date="2018-11-23T14:56:40Z" product-name="ratings">
 		<header/>
 		<body>
-			<trans-unit id="pi1_title" xml:space="preserve" approved="yes">
+			<trans-unit id="plugins_title" xml:space="preserve" approved="yes">
 				<source>Ratings</source>
 				<target>Bewertungen</target>
 			</trans-unit>
-			<trans-unit id="pi1_plus_wiz_description" xml:space="preserve" approved="yes">
+			<trans-unit id="plugins_description" xml:space="preserve" approved="yes">
 				<source>Modern AJAX-based rating system</source>
 				<target>Bewertungssystem mit Sternen (auf AJAX basierend)</target>
 			</trans-unit>

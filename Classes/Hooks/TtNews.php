@@ -49,7 +49,8 @@ class TtNews {
         if ($row['tx_ratings_enable']) {
             $apiObj = t3lib_div::makeInstance('tx_ratings_api');
             $conf = $apiObj->getDefaultConfig();
-            $conf['includeLibs'] = 'EXT:ratings/pi1/class.tx_ratings_pi1.php';
+            $conf['userFunc'] = 'Netcreators\\Ratings\\Controller\\RegisterPluginController->main';
+
             $conf['ref'] = 'tt_news_' . $row['uid'];
 
             $cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);

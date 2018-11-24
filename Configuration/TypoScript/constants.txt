@@ -1,5 +1,5 @@
 
-plugin.tx_ratings_pi1 {
+plugin.tx_ratings {
 
     # cat=plugin.ratings//; type=int+; label=Storage page id;UID of the page where rating records will be stored
     storagePid = 0

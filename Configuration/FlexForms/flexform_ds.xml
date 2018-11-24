@@ -8,7 +8,7 @@
 		<el>
 			<storagePid>
 				<TCEforms>
-					<label>LLL:EXT:ratings/Resources/Private/Language/locallang_be.xlf:tt_content.tx_ratings_pi1.storage.page</label>
+					<label>LLL:EXT:ratings/Resources/Private/Language/locallang_be.xlf:tt_content.tx_ratings.storage.page</label>
 					<config>
 						<type>group</type>
 						<internal_type>db</internal_type>
@@ -23,7 +23,7 @@
 			</storagePid>
 			<templateFile>
 				<TCEforms>
-					<label>LLL:EXT:ratings/Resources/Private/Language/locallang_be.xlf:tt_content.tx_ratings_pi1.template_file</label>
+					<label>LLL:EXT:ratings/Resources/Private/Language/locallang_be.xlf:tt_content.tx_ratings.template_file</label>
 					<config>
 						<type>input</type>
 						<eval>trim,required</eval>

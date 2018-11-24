@@ -3,10 +3,10 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2018-11-23T14:56:40Z" product-name="ratings">
 		<header/>
 		<body>
-			<trans-unit id="pi1_title" xml:space="preserve">
+			<trans-unit id="plugins_title" xml:space="preserve">
 				<source>Ratings</source>
 			</trans-unit>
-			<trans-unit id="pi1_plus_wiz_description" xml:space="preserve">
+			<trans-unit id="plugins_description" xml:space="preserve">
 				<source>Modern AJAX-based rating system</source>
 			</trans-unit>
 			<trans-unit id="api_rating" xml:space="preserve">

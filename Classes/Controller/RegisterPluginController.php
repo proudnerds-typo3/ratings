@@ -1,4 +1,7 @@
 <?php
+
+namespace Netcreators\Ratings\Controller;
+
 /***************************************************************
 *  Copyright notice
 *
@@ -22,6 +25,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 
 define('TX_RATINGS_MIN', 0);
 define('TX_RATINGS_MAX', 100);
@@ -33,85 +38,100 @@ define('TX_RATINGS_MAX', 100);
  * @package	TYPO3
  * @subpackage	tx_ratings
  */
-class tx_ratings_pi1 extends tslib_pibase {
-	var $prefixId      = 'tx_ratings_pi1';		// Same as class name
-	var $scriptRelPath = 'pi1/class.tx_ratings_pi1.php';	// Path to this script relative to the extension dir.
-	var $extKey        = 'ratings';	// The extension key.
-	var $pi_checkCHash = true;
+class RegisterPluginController extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
+{
+    /**
+     * The backReference to the mother cObj object set at call time
+     *
+     * @var ContentObjectRenderer
+     */
+    public $cObj;
 
-	/**
-	 * The main method of the PlugIn
-	 *
-	 * @param string $content: The PlugIn content
-	 * @param array $conf: The PlugIn configuration
-	 * @return string The content that is displayed on the website
-	 */
-	function main($content, $conf) {
-		$this->mergeConfiguration($conf);
+    /**
+     * Should be same as classname of the plugin, used for CSS classes, variables
+     *
+     * @var string
+     */
+    public $prefixId = 'tx_ratings';
 
-		if (!isset($this->conf['storagePid'])) {
-			$this->pi_loadLL();
-			return $this->pi_wrapInBaseClass($this->pi_getLL('no_ts_template'));
-		}
+    /**
+     * Should normally be set in the main function with the TypoScript content passed to the method.
+     *
+     * $conf['LOCAL_LANG'][_key_] is reserved for Local Language overrides.
+     * $conf['CODE.']['10.']['userFunc'] reserved for setting up the USER / USER_INT object. See TSref where CODE is the code of the plugin
+     *
+     * @var array
+     */
+    public $conf = array();
 
-		/* @var $api tx_ratings_api */
-		$api = t3lib_div::makeInstance('tx_ratings_api');
+    /**
+    * The main method of the PlugIn
+    *
+    * @param string $content: The PlugIn content
+    * @param array $conf: The PlugIn configuration
+    * @return string The content that is displayed on the website
+    */
+    public function main($content, $conf) {
+        $this->mergeConfiguration($conf);
 
-		// adds possibility to change ref and so use this plugin with other plugins and not only pages
-		if ($conf['flexibleRef']) {
-			$conf['ref'] = $this->cObj->cObjGetSingle($conf['flexibleRef'], $conf['flexibleRef.']);
-		}
+        if (!isset($this->conf['storagePid'])) {
+            $this->pi_loadLL();
+            return $this->pi_wrapInBaseClass($this->pi_getLL('no_ts_template'));
+        }
 
-		$content.= $api->getRatingDisplay($conf['ref'] ? $this->cObj->stdWrap($conf['ref'], $conf['ref' . '.']) : 'pages_' . $GLOBALS['TSFE']->id, $this->conf);
+        /* @var $api tx_ratings_api */
+        $api = GeneralUtility::makeInstance(\Netcreators\Ratings\Api::class);
 
-		return $this->pi_wrapInBaseClass($content);
-	}
+        // adds possibility to change ref and so use this plugin with other plugins and not only pages
+        if ($conf['flexibleRef']) {
+            $conf['ref'] = $this->cObj->cObjGetSingle($conf['flexibleRef'], $conf['flexibleRef.']);
+        }
+
+        $content.= $api->getRatingDisplay($conf['ref'] ? $this->cObj->stdWrap($conf['ref'], $conf['ref' . '.']) : 'pages_' . $GLOBALS['TSFE']->id, $this->conf);
+
+        return $this->pi_wrapInBaseClass($content);
+    }
 
 
-	/**
-	 * Merges TS configuration with configuration from flexform (latter takes precedence).
-	 *
-	 * @param	array		$conf	Configuration from TS
-	 * @return	void
-	 */
-	function mergeConfiguration($conf) {
-		$this->conf = $conf;
+    /**
+    * Merges TS configuration with configuration from flexform (latter takes precedence).
+    *
+    * @param	array		$conf	Configuration from TS
+    * @return	void
+    */
+    public function mergeConfiguration($conf) {
+        $this->conf = $conf;
 
-		$this->fetchConfigValue('storagePid');
-		$this->conf['storagePid'] = intval($this->conf['storagePid']);
-		if ($this->conf['storagePid'] == 0) {
-			$this->conf['storagePid'] = $GLOBALS['TSFE']->id;
-		}
-		$this->fetchConfigValue('templateFile');
-	}
+        $this->fetchConfigValue('storagePid');
+        $this->conf['storagePid'] = intval($this->conf['storagePid']);
+        if ($this->conf['storagePid'] == 0) {
+            $this->conf['storagePid'] = $GLOBALS['TSFE']->id;
+        }
+        $this->fetchConfigValue('templateFile');
+    }
 
-	/**
-	 * Fetches configuration value from flexform. If value exists, value in
-	 * <code>$this->conf</code> is replaced with this value.
-	 *
-	 * @param	string		$param	Parameter name. If <code>.</code> is found, the first part is section name, second is key (applies only to $this->conf)
-	 * @return	void
-	 */
-	function fetchConfigValue($param) {
-		$section = '';
-		if (strchr($param, '.')) {
-			list($section, $param) = explode('.', $param, 2);
-		}
-		$value = trim($this->pi_getFFvalue($this->cObj->data['pi_flexform'], $param, ($section ? 's' . ucfirst($section) : 'sDEF')));
-		if (!is_null($value) && $value != '') {
-			if ($section) {
-				$this->conf[$section . '.'][$param] = $value;
-			}
-			else {
-				$this->conf[$param] = $value;
-			}
-		}
-	}
+    /**
+    * Fetches configuration value from flexform. If value exists, value in
+    * <code>$this->conf</code> is replaced with this value.
+    *
+    * @param	string		$param	Parameter name. If <code>.</code> is found, the first part is section name, second is key (applies only to $this->conf)
+    * @return	void
+    */
+    public function fetchConfigValue($param) {
+        $section = '';
+        if (strchr($param, '.')) {
+            list($section, $param) = explode('.', $param, 2);
+        }
+        $value = trim($this->pi_getFFvalue($this->cObj->data['pi_flexform'], $param, ($section ? 's' . ucfirst($section) : 'sDEF')));
+        if (!is_null($value) && $value != '') {
+            if ($section) {
+                $this->conf[$section . '.'][$param] = $value;
+            }
+            else {
+                $this->conf[$param] = $value;
+            }
+        }
+    }
 }
 
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ratings/pi1/class.tx_ratings_pi1.php'])	{
-	/** @noinspection PhpIncludeInspection */
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ratings/pi1/class.tx_ratings_pi1.php']);
-}
 
-?>
