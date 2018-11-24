@@ -1,20 +1,25 @@
-# cat=plugin.tx_ratings_pi1/setup; type=int+; label=Storage page id;UID of the page where rating records will be stored
-plugin.tx_ratings_pi1.storagePid = 0
-# cat=plugin.tx_ratings_pi1/setup; type=int; label=Minimum rating value;Warning: this value must not be changed after ratings start working or results will be incorrect!
-plugin.tx_ratings_pi1.minValue = 1
-# cat=plugin.tx_ratings_pi1/setup; type=int; label=Minimum rating value;Warning: this value must not be changed after ratings start working or results will be incorrect! You may also need to change CSS styles to display ratings properly
-plugin.tx_ratings_pi1.maxValue = 5
-# cat=plugin.tx_ratings_pi1/setup; type=int+; label=Rating image width
-plugin.tx_ratings_pi1.ratingImageWidth = 11
-# cat=plugin.tx_ratings_pi1/setup; type=options[Auto=auto,Force static=static]; label=Display mode
-plugin.tx_ratings_pi1.mode = auto
-# cat=plugin.tx_ratings_pi1/setup; type=boolean; label=Disable IP checks;If checked, disables IP checks. This will let users to vote many times on the same item. Useful for debugging.
-plugin.tx_ratings_pi1.disableIpCheck = 0
-# cat=plugin.tx_ratings_pi1/file; type=string; label=Template file
-plugin.tx_ratings_pi1.templateFile = EXT:ratings/res/ratingsMicrodata.html
-# cat=plugin.tx_ratings_pi1/file; type=string; label=Additional CSS file
-plugin.tx_ratings_pi1.additionalCSS =
-# cat=plugin.tx_ratings_pi1/file; type=int; label=Additional CSS Flag
-plugin.tx_ratings_pi1.showAdditionalCSS = 0
-# cat=plugin.tx_ratings_pi1/file; type=string; label=the name of the page object
-plugin.tx_ratings_pi1.pageObjectName = page
+
+plugin.tx_ratings_pi1 {
+
+    # cat=plugin.ratings//; type=int+; label=Storage page id;UID of the page where rating records will be stored
+    storagePid = 0
+    # cat=plugin.ratings//; type=int; label=Minimum rating value;Warning: this value must not be changed after ratings start working or results will be incorrect!
+    minValue = 1
+    # cat=plugin.ratings//; type=int; label=Minimum rating value;Warning: this value must not be changed after ratings start working or results will be incorrect! You may also need to change CSS styles to display ratings properly
+    maxValue = 5
+    # cat=plugin.ratings//; type=int+; label=Rating image width
+    ratingImageWidth = 11
+    # cat=plugin.ratings//; type=options[Auto=auto,Force static=static]; label=Display mode
+    mode = auto
+    # cat=plugin.ratings//; type=boolean; label=Disable IP checks;If checked, disables IP checks. This will let users to vote many times on the same item. Useful for debugging.
+    disableIpCheck = 0
+    # cat=plugin.ratings/file; type=string; label=Template file
+    templateFile = EXT:ratings/Resources/Private/Templates/ratingsMicrodata.html
+    # cat=plugin.ratings/file; type=string; label=Additional CSS file
+    additionalCSS =
+    # cat=plugin.ratings/file; type=int; label=Additional CSS Flag
+    showAdditionalCSS = 0
+    # cat=plugin.ratings/file; type=string; label=the name of the page object
+    pageObjectName = page
+}
+
