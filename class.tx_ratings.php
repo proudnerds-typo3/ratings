@@ -27,9 +27,10 @@ class tx_ratings {
     public $cObj;
 
     public function main($content, $conf) {
-        $pibaseObj = GeneralUtility::makeInstance(Netcreators\Ratings\Controller\RegisterPluginController::class);
+        $pibaseObj = GeneralUtility::makeInstance(\Netcreators\Ratings\Controller\RegisterPluginController::class);
         $pibaseObj->cObj = $this->cObj;
         $content = $pibaseObj->main($content, $conf);
+        $content = 'TEST Ratings';
         return $content;
     }
 }
@@ -37,6 +38,6 @@ class tx_ratings {
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ratings/pi/class.tx_ratings.php'])	{
     /** @noinspection PhpIncludeInspection */
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ratings/pid/class.tx_ratings.php']);
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ratings/pi/class.tx_ratings.php']);
 }
 

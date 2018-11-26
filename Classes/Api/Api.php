@@ -55,7 +55,7 @@ class Api {
     *
     */
     public function __construct() {
-        $this->cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class)
+        $this->cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
         $this->cObj->start('', '');
         $this->databaseHandle = $this->getDatabaseConnection();
     }

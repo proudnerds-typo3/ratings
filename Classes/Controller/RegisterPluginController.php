@@ -80,7 +80,7 @@ class RegisterPluginController extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         }
 
         /* @var $api tx_ratings_api */
-        $api = GeneralUtility::makeInstance(\Netcreators\Ratings\Api::class);
+        $api = GeneralUtility::makeInstance(\Netcreators\Ratings\Api\Api::class);
 
         // adds possibility to change ref and so use this plugin with other plugins and not only pages
         if ($conf['flexibleRef']) {

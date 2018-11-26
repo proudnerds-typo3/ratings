@@ -1,3 +1,7 @@
+2018-11-26 Franz Holzinger <franz@ttproducts.de>
+
+    * Change the list type into ratings.
+
 2018-11-24 Franz Holzinger <franz@ttproducts.de>
 
     * Replace tx_ratings_pi1 by tx_ratings because in TYPO3 only one plugin is supported.

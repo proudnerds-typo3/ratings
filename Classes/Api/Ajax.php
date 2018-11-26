@@ -43,7 +43,8 @@ class Ajax {
     * Initializes the class
     *
     */
-    public function __construct() {
+    public function __construct()
+    {
         $data_str = GeneralUtility::_GP('data');
         $data = unserialize(base64_decode($data_str));
         $language = \TYPO3\CMS\Lang\Controller\LanguageController::getLanguageService();
@@ -83,7 +84,8 @@ class Ajax {
     *
     * @return	void
     */
-    public function main() {
+    public function main()
+    {
         $this->updateRating();
     }
 
@@ -92,7 +94,8 @@ class Ajax {
     *
     * @return	void
     */
-    protected function updateRating() {
+    protected function updateRating()
+    {
         /* @var $apiObj tx_ratings_api */
         $apiObj = GeneralUtility::makeInstance('tx_ratings_api');
         /** @var t3lib_DB $databaseHandle */

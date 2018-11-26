@@ -41,7 +41,7 @@ class WizardIcon
     {
         $wizardIcon = 'Resources/Public/Icons/PluginWizard.png';
         $languageFile = 'Resources/Private/Language/locallang.xlf';
-        $params = '&defVals[tt_content][CType]=list&defVals[tt_content][list_type]=ratings_pi1';
+        $params = '&defVals[tt_content][CType]=list&defVals[tt_content][list_type]=ratings_pi';
 
         $wizardItem = array(
             'title' => $GLOBALS['LANG']->sL('LLL:EXT:ratings/' . $languageFile . ':plugins_title'),
@@ -65,7 +65,7 @@ class WizardIcon
             $wizardItem['icon'] = ExtensionManagementUtility::extRelPath('ratings') . $wizardIcon;
         }
 
-        $wizardItems['plugins_tx_ratings_pi1'] = $wizardItem;
+        $wizardItems['plugins_tx_ratings'] = $wizardItem;
 
         return $wizardItems;
     }

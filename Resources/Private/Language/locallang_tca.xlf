@@ -27,7 +27,7 @@
 			<trans-unit id="tx_ratings_iplog.ip" xml:space="preserve">
 				<source>IP address:</source>
 			</trans-unit>
-			<trans-unit id="tt_content.list_type_pi1" xml:space="preserve">
+			<trans-unit id="tt_content.list_type_pi" xml:space="preserve">
 				<source>Ratings</source>
 			</trans-unit>
 			<trans-unit id="tt_news.tx_ratings_enable" xml:space="preserve">
