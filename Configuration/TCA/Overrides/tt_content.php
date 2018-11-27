@@ -10,7 +10,7 @@ $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist'][$listType] = 
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
     array(
-        'LLL:EXT:ratings/Resources/Private/Language/locallang_tca.xlf:tt_content.list_type_pi',
+        'LLL:EXT:ratings/Resources/Private/Language/locallang_tca.xlf:tt_content.list_type',
         $listType,
         'EXT:ratings/ext_icon.gif'
     ),

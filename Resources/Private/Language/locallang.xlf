@@ -24,6 +24,9 @@
 			<trans-unit id="api_tip" xml:space="preserve">
 				<source>Click the rating bar to rate this item.</source>
 			</trans-unit>
+			<trans-unit id="no_ts_template" xml:space="preserve">
+				<source>Error: TS template from ratings extension is not included to site TS template</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

@@ -1,3 +1,7 @@
+2018-11-27 Franz Holzinger <franz@ttproducts.de>
+
+    * Enhance the check if the TypoScript of the ratings extenion has been included to the main setup.
+
 2018-11-26 Franz Holzinger <franz@ttproducts.de>
 
     * Change the list type into ratings.

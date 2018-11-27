@@ -55,6 +55,21 @@ class RegisterPluginController extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     public $prefixId = 'tx_ratings';
 
     /**
+     * Path to the looking for a "locallang" file in the
+     * plugin class directory
+     *
+     * @var string
+     */
+    public $scriptRelPath = 'Resources/Private/Language/locallang.xlf';
+
+    /**
+     * Extension key.
+     *
+     * @var string
+     */
+    public $extKey = 'ratings';
+
+    /**
      * Should normally be set in the main function with the TypoScript content passed to the method.
      *
      * $conf['LOCAL_LANG'][_key_] is reserved for Local Language overrides.
@@ -74,9 +89,14 @@ class RegisterPluginController extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     public function main($content, $conf) {
         $this->mergeConfiguration($conf);
 
-        if (!isset($this->conf['storagePid'])) {
+        if (
+            !isset($this->conf['storagePid']) ||
+            !isset($this->conf['templateFile']) ||
+            !isset($this->conf['mode'])
+        ) {
             $this->pi_loadLL();
-            return $this->pi_wrapInBaseClass($this->pi_getLL('no_ts_template'));
+            $errorContent = $this->pi_getLL('no_ts_template');
+            return $this->pi_wrapInBaseClass($errorContent);
         }
 
         /* @var $api tx_ratings_api */
@@ -87,7 +107,7 @@ class RegisterPluginController extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             $conf['ref'] = $this->cObj->cObjGetSingle($conf['flexibleRef'], $conf['flexibleRef.']);
         }
 
-        $content.= $api->getRatingDisplay($conf['ref'] ? $this->cObj->stdWrap($conf['ref'], $conf['ref' . '.']) : 'pages_' . $GLOBALS['TSFE']->id, $this->conf);
+        $content .= $api->getRatingDisplay($conf['ref'] ? $this->cObj->stdWrap($conf['ref'], $conf['ref' . '.']) : 'pages_' . $GLOBALS['TSFE']->id, $this->conf);
 
         return $this->pi_wrapInBaseClass($content);
     }

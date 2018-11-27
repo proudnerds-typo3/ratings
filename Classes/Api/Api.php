@@ -110,8 +110,9 @@ class Api {
         }
 
         if (!$template) {
-            GeneralUtility::devLog('Unable to load template code from "' . $conf['templateFile'] . '"', 'ratings', 3);
-            return '';
+            $errorContent = 'Unable to load template code from "' . $conf['templateFile'] . '"';
+            GeneralUtility::devLog($errorContent, 'ratings', 3);
+            return $errorContent;
         }
         return $this->generateRatingContent($ref, $template, $conf);
     }
