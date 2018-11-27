@@ -25,6 +25,7 @@ namespace Netcreators\Ratings\Api;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -179,19 +180,12 @@ class Api {
     */
     protected function generateRatingContent($ref, $template, array &$conf) {
         // Init language
-        if ($GLOBALS['LANG'] instanceof language) {
-            $language = &$GLOBALS['LANG'];
-        }
-        else {
-            $language = GeneralUtility::makeInstance('language');
-            $language->init($GLOBALS['TSFE']->lang);
-        }
-        /* @var $language language */
+        $language = $this->getLanguageService();
 
-        $siteRelPath = t3lib_extMgm::siteRelPath('ratings');
+        $siteRelPath = ExtensionManagementUtility::siteRelPath('ratings');
         $rating = $this->getRatingInfo($ref);
         if ($rating['vote_count'] > 0) {
-            $rating_value = $rating['rating']/$rating['vote_count'];
+            $rating_value = $rating['rating'] / $rating['vote_count'];
             $rating_str = sprintf($language->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_rating'), $rating_value, $conf['maxValue'], $rating['vote_count']);
         } else {
             $rating_value = 0;
@@ -270,6 +264,11 @@ class Api {
     protected function getDatabaseConnection()
     {
         return $GLOBALS['TYPO3_DB'];
+    }
+
+    protected function getLanguageService()
+    {
+        return $GLOBALS['LANG'];
     }
 }
 

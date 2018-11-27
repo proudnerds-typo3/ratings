@@ -47,7 +47,7 @@ class Ajax {
     {
         $data_str = GeneralUtility::_GP('data');
         $data = unserialize(base64_decode($data_str));
-        $language = \TYPO3\CMS\Lang\Controller\LanguageController::getLanguageService();
+        $language = $this->getLanguageService();
         $language->init($data['lang'] ? $data['lang'] : 'default');
         $language->includeLLFile('EXT:ratings/Resources/Private/Language/locallang_ajax.xlf');
 
@@ -162,6 +162,11 @@ class Ajax {
     protected function getDatabaseConnection()
     {
         return $GLOBALS['TYPO3_DB'];
+    }
+
+    protected function getLanguageService()
+    {
+        return $GLOBALS['LANG'];
     }
 }
 
