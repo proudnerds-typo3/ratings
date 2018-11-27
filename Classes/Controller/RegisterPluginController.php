@@ -54,13 +54,6 @@ class RegisterPluginController extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
      */
     public $prefixId = 'tx_ratings';
 
-    /**
-     * Path to the looking for a "locallang" file in the
-     * plugin class directory
-     *
-     * @var string
-     */
-    public $scriptRelPath = 'Resources/Private/Language/locallang.xlf';
 
     /**
      * Extension key.
@@ -94,7 +87,7 @@ class RegisterPluginController extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             !isset($this->conf['templateFile']) ||
             !isset($this->conf['mode'])
         ) {
-            $this->pi_loadLL();
+            $this->pi_loadLL('EXT:ratings/Resources/Private/Language/locallang.xlf');
             $errorContent = $this->pi_getLL('no_ts_template');
             return $this->pi_wrapInBaseClass($errorContent);
         }
