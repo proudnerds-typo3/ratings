@@ -1,5 +1,7 @@
 2018-11-27 Franz Holzinger <franz@ttproducts.de>
 
+    * replace manual.sxw by manual.odt
+    * core change: use TYPO3\CMS\Core\Utility\MathUtility::canBeInterpretedAsInteger instead of t3lib_utility_Math::canBeInterpretedAsInteger
     * Enhance the check if the TypoScript of the ratings extenion has been included to the main setup.
 
 2018-11-26 Franz Holzinger <franz@ttproducts.de>
