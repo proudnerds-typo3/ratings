@@ -28,6 +28,7 @@ namespace Netcreators\Ratings\Api;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 
 /**
@@ -195,17 +196,15 @@ class Api {
     * @return	string		Generated content
     */
     protected function generateRatingContent($ref, $template, array $conf) {
-        // Init language
-        $language = $this->getLanguageService();
-
+        $tsfe = $this->getTypoScriptFrontendController();
         $siteRelPath = ExtensionManagementUtility::siteRelPath('ratings');
         $rating = $this->getRatingInfo($ref);
         if ($rating['vote_count'] > 0) {
-            $rating_value = $rating['rating'] / $rating['vote_count'];
-            $rating_str = sprintf($language->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_rating'), $rating_value, $conf['maxValue'], $rating['vote_count']);
+            $ratingValue = $rating['rating'] / $rating['vote_count'];
+            $rating_str = sprintf($tsfe->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_rating'), $ratingValue, $conf['maxValue'], $rating['vote_count']);
         } else {
-            $rating_value = 0;
-            $rating_str = $language->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_not_rated');
+            $ratingValue = 0;
+            $rating_str = $tsfe->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_not_rated');
         }
 
         if (
@@ -245,12 +244,12 @@ class Api {
         $markers = array(
             '###PID###' => $GLOBALS['TSFE']->id,
             '###REF###' => htmlspecialchars($ref),
-            '###TEXT_SUBMITTING###' => $language->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_submitting'),
-            '###TEXT_ALREADY_RATED###' => $language->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_already_rated'),
-            '###BAR_WIDTH###' => $this->getBarWidth($rating_value, $conf['ratingImageWidth']),
+            '###TEXT_SUBMITTING###' => $tsfe->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_submitting'),
+            '###TEXT_ALREADY_RATED###' => $tsfe->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_already_rated'),
+            '###BAR_WIDTH###' => $this->getBarWidth($ratingValue, $conf['ratingImageWidth']),
             '###RATING###' => $rating_str,
-            '###RATING_VALUE###' => $rating_value,
-            '###TEXT_RATING_TIP###' => $language->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_tip'),
+            '###RATING_VALUE###' => $ratingValue,
+            '###TEXT_RATING_TIP###' => $tsfe->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_tip'),
             '###SITE_REL_PATH###' => $siteRelPath,
             '###VOTE_LINKS###' => $links,
             '###RAW_COUNT###' => $this->cObj->stdWrap($rating['vote_count'], $conf['voteCountStdWrap.']),
@@ -259,6 +258,7 @@ class Api {
             '###RAW_VOTE_MAX###' => $this->cObj->stdWrap($conf['maxValue'], $conf['ratingMaxValueStdWrap.']),
             '###RAW_VOTE_MIN###' => $this->cObj->stdWrap($conf['minValue'], $conf['ratingMinValueStdWrap.']),
         );
+
         $result = $this->cObj->substituteMarkerArray($subTemplate, $markers);
         return $result;
     }
@@ -287,15 +287,12 @@ class Api {
         return $GLOBALS['TYPO3_DB'];
     }
 
-    protected function getLanguageService()
+    /**
+     * @return TypoScriptFrontendController
+     */
+    protected function getTypoScriptFrontendController()
     {
-        $result = '';
-        if (is_object($GLOBALS['TSFE'])) {
-            $result = $GLOBALS['TSFE'];
-        } else {
-            $result = $GLOBALS['LANG'];
-        }
-        return $result;
+        return $GLOBALS['TSFE'];
     }
 }
 

@@ -30,6 +30,7 @@ namespace Netcreators\Ratings\Api;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
+use TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController;
 
 /**
  * Comment management script.
@@ -48,34 +49,33 @@ class Ajax {
     {
         $data_str = GeneralUtility::_GP('data');
         $data = unserialize(base64_decode($data_str));
-        $language = $this->getLanguageService();
-        $language->init($data['lang'] ? $data['lang'] : 'default');
-        $language->includeLLFile('EXT:ratings/Resources/Private/Language/locallang_ajax.xlf');
+        $tsfe = $this->getTypoScriptFrontendController();
+        $tsfe->readLLfile('EXT:ratings/Resources/Private/Language/locallang_ajax.xlf');
 
         // Sanity check
         $this->rating = GeneralUtility::_GP('rating');
         if (!MathUtility::canBeInterpretedAsInteger($this->rating)) {
-            echo $language->getLL('bad_rating_value');
+            echo $tsfe->getLL('bad_rating_value');
             exit;
         }
         $this->ref = GeneralUtility::_GP('ref');
         if (trim($this->ref) == '') {
-            echo $language->getLL('bad_ref_value');
+            echo $tsfe->getLL('bad_ref_value');
             exit;
         }
         $check = GeneralUtility::_GP('check');
         if (md5($this->ref . $this->rating . $data_str . $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']) != $check) {
-            echo $language->getLL('wrong_check_value');
+            echo $tsfe->getLL('wrong_check_value');
             exit;
         }
         $this->conf = $data['conf'];
         if (!is_array($this->conf)) {
-            echo $language->getLL('bad_conf_value');
+            echo $tsfe->getLL('bad_conf_value');
             exit;
         }
         $this->pid = $data['pid'];
         if (!MathUtility::canBeInterpretedAsInteger($this->pid)) {
-            echo $language->getLL('bad_pid_value');
+            echo $tsfe->getLL('bad_pid_value');
             exit;
         }
     }
@@ -163,15 +163,12 @@ class Ajax {
         return $GLOBALS['TYPO3_DB'];
     }
 
-    protected function getLanguageService()
+    /**
+     * @return TypoScriptFrontendController
+     */
+    protected function getTypoScriptFrontendController()
     {
-        $result = '';
-        if (is_object($GLOBALS['TSFE'])) {
-            $result = $GLOBALS['TSFE'];
-        } else {
-            $result = $GLOBALS['LANG'];
-        }
-        return $result;
+        return $GLOBALS['TSFE'];
     }
 }
 

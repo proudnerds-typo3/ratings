@@ -1,7 +1,7 @@
 {
   "name": "netcreators/ratings",
   "type": "typo3-cms-extension",
-  "description": "Shop system extension for TYPO3 CMS",
+  "description": "Modern AJAX-based ratings system",
   "keywords": [
     "TYPO3",
     "extension",

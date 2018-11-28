@@ -47,10 +47,9 @@ class TtNews {
     public function extraItemMarkerProcessor(array &$markerArray, array $row, $lConf, $pObj) {
         /* @var $pObj tx_ttnews */
         if ($row['tx_ratings_enable']) {
-            $apiObj = t3lib_div::makeInstance('tx_ratings_api');
+            $api = GeneralUtility::makeInstance(\Netcreators\Ratings\Api\Api::class);
             $conf = $apiObj->getDefaultConfig();
             $conf['userFunc'] = 'Netcreators\\Ratings\\Controller\\RegisterPluginController->main';
-
             $conf['ref'] = 'tt_news_' . $row['uid'];
 
             $cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);

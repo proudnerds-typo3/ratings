@@ -2,7 +2,8 @@
 
 2018-11-28 Franz Holzinger <franz@ttproducts.de>
 
-    * getLanguageService use $GLOBALS["LANG"] in the front end only if a backend user has logged in.
+    * remove the Javascript libraries
+    * instead of getLanguageService use $GLOBALS["TSFE"] only. No backend support for rating.
 
 2018-11-27 Franz Holzinger <franz@ttproducts.de>
 
