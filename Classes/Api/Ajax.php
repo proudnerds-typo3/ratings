@@ -29,6 +29,7 @@ namespace Netcreators\Ratings\Api;
 ***************************************************************/
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 
 /**
  * Comment management script.
@@ -53,7 +54,7 @@ class Ajax {
 
         // Sanity check
         $this->rating = GeneralUtility::_GP('rating');
-        if (!t3lib_utility_Math::canBeInterpretedAsInteger($this->rating)) {
+        if (!MathUtility::canBeInterpretedAsInteger($this->rating)) {
             echo $language->getLL('bad_rating_value');
             exit;
         }
@@ -73,7 +74,7 @@ class Ajax {
             exit;
         }
         $this->pid = $data['pid'];
-        if (!t3lib_utility_Math::canBeInterpretedAsInteger($this->pid)) {
+        if (!MathUtility::canBeInterpretedAsInteger($this->pid)) {
             echo $language->getLL('bad_pid_value');
             exit;
         }
@@ -96,18 +97,16 @@ class Ajax {
     */
     protected function updateRating()
     {
-        /* @var $apiObj tx_ratings_api */
-        $apiObj = GeneralUtility::makeInstance('tx_ratings_api');
-        /** @var t3lib_DB $databaseHandle */
+        $api = GeneralUtility::makeInstance(\Netcreators\Ratings\Api\Api::class);
         $databaseHandle = $this->getDatabaseConnection();
 
-        if ($this->conf['disableIpCheck'] || !$apiObj->isVoted($this->ref)) {
+        if ($this->conf['disableIpCheck'] || !$api->isVoted($this->ref)) {
 
             // Do everything inside transaction
             $databaseHandle->sql_query('START TRANSACTION');
             $dataWhere = 'pid=' . intval($this->conf['storagePid']) .
                         ' AND reference=' . $databaseHandle->fullQuoteStr($this->ref, 'tx_ratings_data') .
-                        $apiObj->enableFields('tx_ratings_data');
+                        $api->enableFields('tx_ratings_data');
             list($row) = $databaseHandle->exec_SELECTgetRows('COUNT(*) AS t',
                     'tx_ratings_data', $dataWhere);
             if ($row['t'] > 0) {
@@ -146,14 +145,14 @@ class Ajax {
                     'crdate' => time(),
                     'tstamp' => time(),
                     'reference' => $this->ref,
-                    'ip' => $apiObj->getCurrentIp(),
+                    'ip' => $api->getCurrentIp(),
                 ));
             $databaseHandle->sql_query('COMMIT');
         }
 
         // Get rating display
         $this->conf['mode'] = 'static';
-        echo $apiObj->getRatingDisplay($this->ref, $this->conf);
+        echo $api->getRatingDisplay($this->ref, $this->conf);
     }
 
     /**
@@ -166,7 +165,13 @@ class Ajax {
 
     protected function getLanguageService()
     {
-        return $GLOBALS['LANG'];
+        $result = '';
+        if (is_object($GLOBALS['TSFE'])) {
+            $result = $GLOBALS['TSFE'];
+        } else {
+            $result = $GLOBALS['LANG'];
+        }
+        return $result;
     }
 }
 

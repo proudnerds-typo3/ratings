@@ -27,6 +27,8 @@ namespace Netcreators\Ratings\Api;
 
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
+
 
 /**
  * This class contains API for ratings. There are two ways to use this API:
@@ -42,13 +44,10 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class Api {
 
     /**
-    * Instance of tslib_cObj
     *
-    * @var tslib_cObj
     */
     protected $cObj;
 
-    /** @var  t3lib_DB */
     protected $databaseHandle;
 
     /**
@@ -137,11 +136,16 @@ class Api {
     * @return	boolean		true if item was voted
     */
     public function isVoted($ref) {
-        list($rec) = $this->databaseHandle->exec_SELECTgetRows('COUNT(*) AS t',
-                    'tx_ratings_iplog',
-                    ' reference=' . $this->databaseHandle->fullQuoteStr($ref, 'tx_ratings_iplog') .
-                    ' AND ip=' . $this->databaseHandle->fullQuoteStr($this->getCurrentIp(), 'tx_ratings_iplog') .
-                    $this->enableFields('tx_ratings_iplog'));
+        list($rec) =
+            $this->databaseHandle->exec_SELECTgetRows(
+                'COUNT(*) AS t',
+                'tx_ratings_iplog',
+                ' reference=' .
+                    $this->databaseHandle->fullQuoteStr($ref, 'tx_ratings_iplog') .
+                    ' AND ip=' .
+                    $this->databaseHandle->fullQuoteStr($this->getCurrentIp(), 'tx_ratings_iplog') .
+                $this->enableFields('tx_ratings_iplog')
+            );
         return ($rec['t'] > 0);
     }
 
@@ -149,12 +153,19 @@ class Api {
     /**
     * Calculates image bar width
     *
-    * @param	int		$rating	Rating value
-    * @param	array		$conf	Configuration
-    * @return	int
+    * @param    int    $rating            Rating value
+    * @param    int    $ratingImageWidth  width of the rating image
+    * @return   int
     */
-    protected function getBarWidth($rating, $conf) {
-        return intval($conf['ratingImageWidth'] * $rating);
+    protected function getBarWidth($rating, $ratingImageWidth) {
+        $result = 0;
+        if (
+            MathUtility::canBeInterpretedAsInteger($ratingImageWidth) &&
+            MathUtility::canBeInterpretedAsInteger($rating)
+        ) {
+            $result = intval($ratingImageWidth * $rating);
+        }
+        return $result;
     }
 
     /**
@@ -164,9 +175,14 @@ class Api {
     * @return array Array with two values: rating and count, which is calculated rating value and number of votes respectively
     */
     protected function getRatingInfo($ref) {
-        $recs = $this->databaseHandle->exec_SELECTgetRows('rating,vote_count',
-            'tx_ratings_data',
-            ' reference=' . $this->databaseHandle->fullQuoteStr($ref, 'tx_ratings_data') . $this->enableFields('tx_ratings_data'));
+        $recs =
+            $this->databaseHandle->exec_SELECTgetRows(
+                'rating,vote_count',
+                'tx_ratings_data',
+                ' reference=' .
+                    $this->databaseHandle->fullQuoteStr($ref, 'tx_ratings_data') .
+                    $this->enableFields('tx_ratings_data')
+            );
         return (count($recs) ? $recs[0] : array('rating' => 0, 'vote_count' => 0));
     }
 
@@ -178,7 +194,7 @@ class Api {
     * @param	array		$conf	Configuration array
     * @return	string		Generated content
     */
-    protected function generateRatingContent($ref, $template, array &$conf) {
+    protected function generateRatingContent($ref, $template, array $conf) {
         // Init language
         $language = $this->getLanguageService();
 
@@ -191,7 +207,11 @@ class Api {
             $rating_value = 0;
             $rating_str = $language->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_not_rated');
         }
-        if ($conf['mode'] == 'static' || (!$conf['disableIpCheck'] && $this->isVoted($ref))) {
+
+        if (
+            $conf['mode'] == 'static' ||
+            (!$conf['disableIpCheck'] && $this->isVoted($ref))
+        ) {
             $subTemplate = $this->cObj->getSubpart($template, '###TEMPLATE_RATING_STATIC###');
             $links = '';
         } else {
@@ -227,7 +247,7 @@ class Api {
             '###REF###' => htmlspecialchars($ref),
             '###TEXT_SUBMITTING###' => $language->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_submitting'),
             '###TEXT_ALREADY_RATED###' => $language->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_already_rated'),
-            '###BAR_WIDTH###' => $this->getBarWidth($rating_value, $conf),
+            '###BAR_WIDTH###' => $this->getBarWidth($rating_value, $conf['ratingImageWidth']),
             '###RATING###' => $rating_str,
             '###RATING_VALUE###' => $rating_value,
             '###TEXT_RATING_TIP###' => $language->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_tip'),
@@ -239,7 +259,8 @@ class Api {
             '###RAW_VOTE_MAX###' => $this->cObj->stdWrap($conf['maxValue'], $conf['ratingMaxValueStdWrap.']),
             '###RAW_VOTE_MIN###' => $this->cObj->stdWrap($conf['minValue'], $conf['ratingMinValueStdWrap.']),
         );
-        return $this->cObj->substituteMarkerArray($subTemplate, $markers);
+        $result = $this->cObj->substituteMarkerArray($subTemplate, $markers);
+        return $result;
     }
 
     /**
@@ -252,8 +273,8 @@ class Api {
         if ($GLOBALS['TSFE']) {
             return $this->cObj->enableFields($tableName);
         }
-        /* @var $sys_page t3lib_pageSelect */
-        $sys_page = GeneralUtility::makeInstance('t3lib_pageSelect');
+        /* @var $sys_page \TYPO3\CMS\Frontend\Page\PageRepository */
+        $sys_page = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Page\PageRepository::class);
 
         return $sys_page->enableFields($tableName);
     }
@@ -268,7 +289,13 @@ class Api {
 
     protected function getLanguageService()
     {
-        return $GLOBALS['LANG'];
+        $result = '';
+        if (is_object($GLOBALS['TSFE'])) {
+            $result = $GLOBALS['TSFE'];
+        } else {
+            $result = $GLOBALS['LANG'];
+        }
+        return $result;
     }
 }
 
