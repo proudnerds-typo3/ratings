@@ -48,7 +48,7 @@ class TtNews {
         /* @var $pObj tx_ttnews */
         if ($row['tx_ratings_enable']) {
             $api = GeneralUtility::makeInstance(\Netcreators\Ratings\Api\Api::class);
-            $conf = $apiObj->getDefaultConfig();
+            $conf = $api->getDefaultConfig();
             $conf['userFunc'] = 'Netcreators\\Ratings\\Controller\\RegisterPluginController->main';
             $conf['ref'] = 'tt_news_' . $row['uid'];
 

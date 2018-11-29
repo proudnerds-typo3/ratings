@@ -85,7 +85,8 @@ class Api {
     * @return	array		TypoScript configuration for ratings
     */
     public function getDefaultConfig() {
-        return $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_ratings.'];
+        $result = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_ratings.'];
+        return $result;
     }
 
     /**
