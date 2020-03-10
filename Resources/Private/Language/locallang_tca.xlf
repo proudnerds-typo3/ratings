@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2018-11-23T14:56:53Z" product-name="ratings">
+		<header/>
+		<body>
+			<trans-unit id="tx_ratings_data" xml:space="preserve">
+				<source>Ratings data</source>
+			</trans-unit>
+			<trans-unit id="tx_ratings_data.reference" xml:space="preserve">
+				<source>Rated item:</source>
+			</trans-unit>
+			<trans-unit id="tx_ratings_data.rating" xml:space="preserve">
+				<source>Accumulated rating value:</source>
+			</trans-unit>
+			<trans-unit id="tx_ratings_data.vote_count" xml:space="preserve">
+				<source>Number of votes:</source>
+			</trans-unit>
+			<trans-unit id="tx_ratings_iplog" xml:space="preserve">
+				<source>Ratings IP data</source>
+			</trans-unit>
+			<trans-unit id="tx_ratings_iplog.reference" xml:space="preserve">
+				<source>Rated item:</source>
+			</trans-unit>
+			<trans-unit id="tx_ratings_iplog.crdate" xml:space="preserve">
+				<source>Rated on:</source>
+			</trans-unit>
+			<trans-unit id="tx_ratings_iplog.ip" xml:space="preserve">
+				<source>IP address:</source>
+			</trans-unit>
+			<trans-unit id="tt_content.list_type" xml:space="preserve">
+				<source>Ratings</source>
+			</trans-unit>
+			<trans-unit id="tt_news.tx_ratings_enable" xml:space="preserve">
+				<source>Enable ratings</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

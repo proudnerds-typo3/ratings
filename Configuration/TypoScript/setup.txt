@@ -1,0 +1,19 @@
+
+
+plugin.tx_ratings = USER_INT
+plugin.tx_ratings {
+    userFunc = Netcreators\Ratings\Controller\RegisterPluginController->main
+    storagePid = {$plugin.tx_ratings.storagePid}
+    templateFile = {$plugin.tx_ratings.templateFile}
+    minValue = {$plugin.tx_ratings.minValue}
+    maxValue = {$plugin.tx_ratings.maxValue}
+    ratingImageWidth = {$plugin.tx_ratings.ratingImageWidth}
+    mode = {$plugin.tx_ratings.mode}
+    disableIpCheck = {$plugin.tx_ratings.disableIpCheck}
+}
+
+
+[globalVar = LIT:1 = {$plugin.tx_ratings.showAdditionalCSS}]
+{$plugin.tx_ratings.pageObjectName}.includeCSS.ratingsAddtionalCSS = {$plugin.tx_ratings.additionalCSS}
+[end]
+

@@ -1,3 +1,67 @@
+2018-11-29 Franz Holzinger <franz@ttproducts.de>
+
+    * bugfix to the hook for tt_news
+
+2018-11-28 Franz Holzinger <franz@ttproducts.de>
+
+    * remove the Javascript libraries
+    * instead of getLanguageService use $GLOBALS["TSFE"] only. No backend support for rating.
+
+2018-11-27 Franz Holzinger <franz@ttproducts.de>
+
+    * replace manual.sxw by manual.odt
+    * core change: use TYPO3\CMS\Core\Utility\MathUtility::canBeInterpretedAsInteger instead of t3lib_utility_Math::canBeInterpretedAsInteger
+    * Enhance the check if the TypoScript of the ratings extenion has been included to the main setup.
+
+2018-11-26 Franz Holzinger <franz@ttproducts.de>
+
+    * Change the list type into ratings.
+
+2018-11-24 Franz Holzinger <franz@ttproducts.de>
+
+    * Replace tx_ratings_pi1 by tx_ratings because in TYPO3 only one plugin is supported.
+    * add composer.json
+    * core change: plugin icon wizard
+    * changes: constants.txt and setup.txt
+
+2018-11-23 Franz Holzinger <franz@ttproducts.de>
+
+    * bug fixes: tt_news hook and register plugin controller
+    * move res/ratings.html -> Resources/Private/Templates/ratings.html
+    * move res/ratingsMicrodata.html -> Resources/Private/Templates/ratingsMicrodata.html
+    * fix exception 1437750231: replace flexform script with wizard_element_browser
+    * bugfix in tt_content.php
+    * move pi1/flexform_ds.xml -> Configuration/FlexForms/flexform_ds.xml
+    * core change: tslib_cObj -> \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
+    * core change: t3lib_div -> \TYPO3\CMS\Core\Utility\GeneralUtility
+    * move locallang.xml -> Resources/Private/Language/locallang.xlf and Resources/Private/Language/de.locallang.xlf
+    * move locallang_ajax.xml -> Resources/Private/Language/locallang_ajax.xlf
+    * move locallang_db.xml -> Resources/Private/Language/locallang_tca.xlf
+    * move pi1/locallang.xml -> Resources/Private/Language/locallang_be.xlf
+    * move static/Ratings/constants.txt -> Configuration/TypoScript/constants.txt
+    * move static/Ratings/setup.txt -> Configuration/TypoScript/setup.txt
+    * extract the file tt_content.php from ext_tables.php
+    * extract the file tt_news.php from ext_tables.php
+    * move icon_tx_ratings_data.gif -> Resources/Public/Icons/icon_tx_ratings_data.gif
+    * move icon_tx_ratings_iplog.gif -> Resources/Public/Icons/icon_tx_ratings_iplog.gif
+    * add the EidRunner.php script
+    * extract the files tx_ratings_iplog.php from ext_tables.php and tca.php
+    * extract the files tx_ratings_data.php from ext_tables.php and tca.php
+    * Replace t3lib_extMgm by \TYPO3\CMS\Core\Utility\ExtensionManagementUtility
+    * deprecation: Do not call t3lib_div::loadTCA.
+    * deprecation: Do not require t3lib_extMgm::isLoaded("tt_news") in ext_localconf.php.
+    * Ready for TYPO3 7 and 8
+    * Remove the modfunc1 backend module which had no functionality.
+    * Replace the variable $_EXTKEY by 'ratings' because this variable will not be supported by TYPO3 in the future.
+
+2018-11-22 Franz Holzinger <franz@ttproducts.de>
+
+    * move class.tx_ratings_ajax.php -> Classes/Api/Ajax.php
+    * move class.tx_ratings_api.php -> Classes/Api/Api.php
+    * move class.tx_ratings_ttnews.php -> Classes/Hooks/TtNews.php
+	* New marker: add the marker ###RATING_VALUE###
+	* New extension comment: TYPO3 mailinglists are not used so often. It is better to be notified by typo3.slack.com.
+
 2014-03-19 v2.0.3 Leonie Philine Bitto <leonie@netcreators.nl>
 
 	* New version number for renewed TER upload, including the bugfixes

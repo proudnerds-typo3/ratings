@@ -1,13 +1,11 @@
 <?php
-if (!defined ('TYPO3_MODE')) die('Access denied.');
+defined('TYPO3_MODE') or die('Access denied.');
 
-t3lib_extMgm::addPItoST43($_EXTKEY, 'pi1/class.tx_ratings_pi1.php', '_pi1', 'list_type', false);
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPItoST43('ratings', 'class.tx_ratings.php', '', 'list_type', false);
 
 // eID
-$GLOBALS['TYPO3_CONF_VARS']['FE']['eID_include']['tx_ratings_ajax'] = 'EXT:ratings/class.tx_ratings_ajax.php';
+$GLOBALS['TYPO3_CONF_VARS']['FE']['eID_include']['tx_ratings_ajax'] = 'EXT:ratings/Resources/Public/Scripts/Php/EidRunner.php';
 
 // Extra markers hook for tt_news
-if (t3lib_extMgm::isLoaded('tt_news')) {
-	$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['tt_news']['extraItemMarkerHook'][$_EXTKEY] = 'EXT:ratings/class.tx_ratings_ttnews.php:&tx_ratings_ttnews';
-}
-?>
+$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['tt_news']['extraItemMarkerHook']['ratings'] = \Netcreators\Ratings\Hooks\TtNews::class;
+
