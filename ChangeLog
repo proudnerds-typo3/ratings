@@ -1,3 +1,7 @@
+2020-06-19 Franz Holzinger <franz@ttproducts.de>
+
+    * ready for TYPO3 9.5. TCA modifications
+
 2018-11-29 Franz Holzinger <franz@ttproducts.de>
 
     * bugfix to the hook for tt_news
