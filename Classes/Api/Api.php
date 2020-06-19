@@ -85,7 +85,11 @@ class Api {
     * @return	array		TypoScript configuration for ratings
     */
     public function getDefaultConfig() {
-        $result = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_ratings.'];
+        $result = [];
+        $tsfe = $this->getTypoScriptFrontendController();
+        if ($tsfe) {
+            $result = $tsfe->tmpl->setup['plugin.']['tx_ratings.'];
+        }
         return $result;
     }
 
@@ -97,14 +101,16 @@ class Api {
     * @return	string		HTML content
     */
     public function getRatingDisplay($ref, $conf = null) {
+        $tsfe = $this->getTypoScriptFrontendController();
         if (is_null($conf)) {
             $conf = $this->getDefaultConfig();
         }
 
         // Get template
-        if ($GLOBALS['TSFE']) {
+        if ($tsfe) {
             // Normal call
-            $template = $this->cObj->fileResource($conf['templateFile']);
+            $pathFilename = $tsfe->tmpl->getFileName($conf['templateFile']);
+            $template = file_get_contents($pathFilename);
         }
         else {
             // Called from ajax
@@ -198,6 +204,10 @@ class Api {
     */
     protected function generateRatingContent($ref, $template, array $conf) {
         $tsfe = $this->getTypoScriptFrontendController();
+        if (!$tsfe) {
+            return '';
+        }
+        $templateService = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Service\MarkerBasedTemplateService::class);
         $siteRelPath = ExtensionManagementUtility::siteRelPath('ratings');
         $rating = $this->getRatingInfo($ref);
         if ($rating['vote_count'] > 0) {
@@ -212,29 +222,29 @@ class Api {
             $conf['mode'] == 'static' ||
             (!$conf['disableIpCheck'] && $this->isVoted($ref))
         ) {
-            $subTemplate = $this->cObj->getSubpart($template, '###TEMPLATE_RATING_STATIC###');
+            $subTemplate = $templateService->getSubpart($template, '###TEMPLATE_RATING_STATIC###');
             $links = '';
         } else {
-            $subTemplate = $this->cObj->getSubpart($template, '###TEMPLATE_RATING###');
-            $voteSub = $this->cObj->getSubpart($template, '###VOTE_LINK_SUB###');
+            $subTemplate = $templateService->getSubpart($template, '###TEMPLATE_RATING###');
+            $voteSub = $templateService->getSubpart($template, '###VOTE_LINK_SUB###');
             // Make ajaxData
             $confCopy = $conf;
             unset($confCopy['userFunc']);
-            $confCopy['templateFile'] = $GLOBALS['TSFE']->tmpl->getFileName($conf['templateFile']);
+            $confCopy['templateFile'] = $tsfe->tmpl->getFileName($conf['templateFile']);
             $data = serialize(array(
-                'pid' => $GLOBALS['TSFE']->id,
+                'pid' => $tsfe->id,
                 'conf' => $confCopy,
-                'lang' => $GLOBALS['TSFE']->lang,
+                'lang' => $tsfe->lang,
             ));
             $ajaxData = base64_encode($data);
             // Create links
             $links = '';
             for ($i = $conf['minValue']; $i <= $conf['maxValue']; $i++) {
                 $check = md5($ref . $i . $ajaxData . $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']);
-                $links .= $this->cObj->substituteMarkerArray($voteSub, array(
+                $links .= $templateService->substituteMarkerArray($voteSub, array(
                     '###VALUE###' => $i,
                     '###REF###' => $ref,
-                    '###PID###' => $GLOBALS['TSFE']->id,
+                    '###PID###' => $tsfe->id,
                     '###CHECK###' => $check,
                     '###SITE_REL_PATH###' => $siteRelPath,
                     '###AJAX_DATA###' => rawurlencode($ajaxData),
@@ -243,7 +253,7 @@ class Api {
         }
 
         $markers = array(
-            '###PID###' => $GLOBALS['TSFE']->id,
+            '###PID###' => $tsfe->id,
             '###REF###' => htmlspecialchars($ref),
             '###TEXT_SUBMITTING###' => $tsfe->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_submitting'),
             '###TEXT_ALREADY_RATED###' => $tsfe->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_already_rated'),
@@ -260,7 +270,7 @@ class Api {
             '###RAW_VOTE_MIN###' => $this->cObj->stdWrap($conf['minValue'], $conf['ratingMinValueStdWrap.']),
         );
 
-        $result = $this->cObj->substituteMarkerArray($subTemplate, $markers);
+        $result = $templateService->substituteMarkerArray($subTemplate, $markers);
         return $result;
     }
 
@@ -271,7 +281,7 @@ class Api {
     * @return	string		SQL
     */
     public function enableFields($tableName) {
-        if ($GLOBALS['TSFE']) {
+        if ($this->getTypoScriptFrontendController()) {
             return $this->cObj->enableFields($tableName);
         }
         /* @var $sys_page \TYPO3\CMS\Frontend\Page\PageRepository */
