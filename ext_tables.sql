@@ -7,7 +7,7 @@ CREATE TABLE tx_ratings_data (
 	tstamp int(11) DEFAULT '0' NOT NULL,
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
-	reference text NOT NULL,
+	reference text,
 	rating int(11) DEFAULT '0' NOT NULL,
 	vote_count int(11) DEFAULT '0' NOT NULL,
 
@@ -25,7 +25,7 @@ CREATE TABLE tx_ratings_iplog (
 	tstamp int(11) DEFAULT '0' NOT NULL,
 	crdate int(11) DEFAULT '0' NOT NULL,
 	cruser_id int(11) DEFAULT '0' NOT NULL,
-	reference text NOT NULL,
+	reference text,
 	ip varchar(255) DEFAULT '0' NOT NULL,
 
 	PRIMARY KEY (uid),
