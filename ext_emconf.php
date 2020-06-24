@@ -28,6 +28,7 @@ $EM_CONF[$_EXTKEY] = array (
 		),
 		'suggests' => 
 		array (
+            'typo3db_legacy' => '1.0.0-1.1.99',
 		),
 	),
 );
