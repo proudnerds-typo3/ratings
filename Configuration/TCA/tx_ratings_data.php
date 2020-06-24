@@ -21,8 +21,7 @@ $result = [
             'config' => [
                 'type' => 'input',
                 'renderType' => 'inputDateTime',
-                'dbType' => 'datetime',
-                'eval' => 'datetime',
+                'eval' => 'datetime,int',
                 'readOnly' => $tx_ratings_debug_mode_disabled,
                 'default' => 0
             ]
