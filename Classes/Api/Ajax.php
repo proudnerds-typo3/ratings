@@ -110,7 +110,9 @@ class Ajax {
             list($row) = $databaseHandle->exec_SELECTgetRows('COUNT(*) AS t',
                     'tx_ratings_data', $dataWhere);
             if ($row['t'] > 0) {
-                $databaseHandle->exec_UPDATEquery('tx_ratings_data', $dataWhere,
+                $databaseHandle->exec_UPDATEquery(
+                    'tx_ratings_data',
+                    $dataWhere,
                     array(
                         'vote_count' => 'vote_count+1',
                         'rating' => 'rating+' . intval($this->rating),
@@ -118,7 +120,8 @@ class Ajax {
                     ), 'vote_count,rating');
             }
             else {
-                $databaseHandle->exec_INSERTquery('tx_ratings_data',
+                $databaseHandle->exec_INSERTquery(
+                    'tx_ratings_data',
                     array(
                         'pid' => $this->conf['storagePid'],
                         'crdate' => time(),
@@ -126,7 +129,8 @@ class Ajax {
                         'reference' => $this->ref,
                         'vote_count' => 1,
                         'rating' => $this->rating,
-                    ));
+                    )
+                );
             }
             // Call hook if ratings is updated
             if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ratings']['updateRatings'])) {
@@ -139,14 +143,17 @@ class Ajax {
                     GeneralUtility::callUserFunction($userFunc, $params, $this);
                 }
             }
-            $databaseHandle->exec_INSERTquery('tx_ratings_iplog',
+
+            $databaseHandle->exec_INSERTquery(
+                'tx_ratings_iplog',
                 array(
                     'pid' => $this->conf['storagePid'],
                     'crdate' => time(),
                     'tstamp' => time(),
                     'reference' => $this->ref,
                     'ip' => $api->getCurrentIp(),
-                ));
+                )
+            );
             $databaseHandle->sql_query('COMMIT');
         }
 
