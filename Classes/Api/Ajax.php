@@ -98,76 +98,114 @@ class Ajax {
     protected function updateRating()
     {
         $api = GeneralUtility::makeInstance(\Netcreators\Ratings\Api\Api::class);
-        $databaseHandle = $this->getDatabaseConnection();
-
+        $tableName = 'tx_ratings_data';
+        $connection = $api->getConnectionForTable($tableName);
+        $queryBuilder = $connection->createQueryBuilder();
+        $queryBuilder->setRestrictions(GeneralUtility::makeInstance(
+            \TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer::class)
+        );
+        
         if ($this->conf['disableIpCheck'] || !$api->isVoted($this->ref)) {
+            try {
+                // Do everything inside transaction
+                $connection->beginTransaction();
+                $count = $queryBuilder
+                    ->count('*')
+                    ->from($tableName)
+                    ->where(
+                        $queryBuilder->expr()->eq(
+                            'reference',
+                            $queryBuilder->createNamedParameter(
+                                $this->ref,
+                                \PDO::PARAM_STR
+                            )
+                        )
+                    )->andWhere(
+                        $queryBuilder->expr()->eq(
+                            'pid',
+                            $queryBuilder->createNamedParameter(
+                                $this->conf['storagePid'](),
+                                \PDO::PARAM_INT
+                            )
+                        )
+                    )
+                    ->execute()
+                    ->fetchColumn(0);
 
-            // Do everything inside transaction
-            $databaseHandle->sql_query('START TRANSACTION');
-            $dataWhere = 'pid=' . intval($this->conf['storagePid']) .
-                        ' AND reference=' . $databaseHandle->fullQuoteStr($this->ref, 'tx_ratings_data') .
-                        $api->enableFields('tx_ratings_data');
-            list($row) = $databaseHandle->exec_SELECTgetRows('COUNT(*) AS t',
-                    'tx_ratings_data', $dataWhere);
-            if ($row['t'] > 0) {
-                $databaseHandle->exec_UPDATEquery(
-                    'tx_ratings_data',
-                    $dataWhere,
-                    array(
-                        'vote_count' => 'vote_count+1',
-                        'rating' => 'rating+' . intval($this->rating),
-                        'tstamp' => time(),
-                    ), 'vote_count,rating');
-            }
-            else {
-                $databaseHandle->exec_INSERTquery(
-                    'tx_ratings_data',
-                    array(
-                        'pid' => $this->conf['storagePid'],
+                if ($count > 0) {
+                    $queryBuilde->update($tableName)
+                        ->set(
+                            'vote_count',
+                            queryBuilder->expr()->sum(
+                                'vote_count',
+                                $queryBuilder->createNamedParameter(
+                                    1,
+                                    \PDO::PARAM_INT
+                                )
+                            )
+                        )
+                        ->set(
+                            'rating',
+                            queryBuilder->expr()->sum(
+                                'rating',
+                                $queryBuilder->createNamedParameter(
+                                    intval($this->rating),
+                                    \PDO::PARAM_INT
+                                )
+                            )
+                        )
+                        ->set(
+                            'tstamp',
+                            time()
+                        )
+                        ->execute();
+                } else {
+                    $affectedRows = $queryBuilder
+                        ->insert($tableName)
+                        ->values([
+                            'pid' => intval($this->conf['storagePid']),
+                            'crdate' => time(),
+                            'tstamp' => time(),
+                            'reference' => $this->ref,
+                            'vote_count' => 1,
+                            'rating' => $this->rating,
+                        ])
+                        ->execute();
+                }
+                // Call hook if ratings is updated
+                if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ratings']['updateRatings'])) {
+                    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ratings']['updateRatings'] as $userFunc) {
+                        $params = [
+                            'pObj' => &$this,
+                            'pid' => $this->pid,
+                            'ref' => $this->ref,
+                        ];
+                        GeneralUtility::callUserFunction($userFunc, $params, $this);
+                    }
+                }
+
+                $tableName = 'tx_ratings_iplog';
+                $queryBuilder = $api->getQueryBuilder($tableName);
+                $affectedRows = $queryBuilder
+                    ->insert($tableName)
+                    ->values([
+                        'pid' => intval($this->conf['storagePid']),
                         'crdate' => time(),
                         'tstamp' => time(),
                         'reference' => $this->ref,
-                        'vote_count' => 1,
-                        'rating' => $this->rating,
-                    )
-                );
+                        'ip' => $api->getCurrentIp(),
+                    ])
+                    ->execute();
             }
-            // Call hook if ratings is updated
-            if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ratings']['updateRatings'])) {
-                foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ratings']['updateRatings'] as $userFunc) {
-                    $params = array(
-                        'pObj' => &$this,
-                        'pid' => $this->pid,
-                        'ref' => $this->ref,
-                    );
-                    GeneralUtility::callUserFunction($userFunc, $params, $this);
-                }
-            }
-
-            $databaseHandle->exec_INSERTquery(
-                'tx_ratings_iplog',
-                array(
-                    'pid' => $this->conf['storagePid'],
-                    'crdate' => time(),
-                    'tstamp' => time(),
-                    'reference' => $this->ref,
-                    'ip' => $api->getCurrentIp(),
-                )
-            );
-            $databaseHandle->sql_query('COMMIT');
+            $connection->commit();
+        } catch (\Exception $e) {
+            $connection->rollBack();
+            throw $e;
         }
 
         // Get rating display
         $this->conf['mode'] = 'static';
         echo $api->getRatingDisplay($this->ref, $this->conf);
-    }
-
-    /**
-     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
-     */
-    protected function getDatabaseConnection()
-    {
-        return $GLOBALS['TYPO3_DB'];
     }
 
     /**

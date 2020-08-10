@@ -70,7 +70,7 @@ class RegisterPluginController extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
      *
      * @var array
      */
-    public $conf = array();
+    public $conf = [];
 
     /**
     * The main method of the PlugIn
@@ -79,7 +79,8 @@ class RegisterPluginController extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     * @param array $conf: The PlugIn configuration
     * @return string The content that is displayed on the website
     */
-    public function main($content, $conf) {
+    public function main($content, $conf)
+    {
         $this->mergeConfiguration($conf);
 
         if (
@@ -111,7 +112,8 @@ class RegisterPluginController extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     * @param	array		$conf	Configuration from TS
     * @return	void
     */
-    public function mergeConfiguration($conf) {
+    public function mergeConfiguration($conf)
+    {
         $this->conf = $conf;
 
         $this->fetchConfigValue('storagePid');
@@ -129,7 +131,8 @@ class RegisterPluginController extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     * @param	string		$param	Parameter name. If <code>.</code> is found, the first part is section name, second is key (applies only to $this->conf)
     * @return	void
     */
-    public function fetchConfigValue($param) {
+    public function fetchConfigValue($param)
+    {
         $section = '';
         if (strchr($param, '.')) {
             list($section, $param) = explode('.', $param, 2);
