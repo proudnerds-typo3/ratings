@@ -8,6 +8,10 @@ $result = [
         'tstamp'    => 'tstamp',
         'crdate'    => 'crdate',
         'cruser_id' => 'cruser_id',
+        'delete'    => 'deleted',
+        'enablecolumns' => [
+            'disabled' => 'hidden'
+        ],
         'default_sortby' => 'ORDER BY crdate DESC',
         'iconfile'  =>  'EXT:ratings/Resources/Public/Icons/icon_tx_ratings_iplog.gif'
     ],
@@ -39,6 +43,12 @@ $result = [
                 'default' => 0
             ]
         ],
+        'hidden' => [
+            'label'  => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
+            'config' => [
+                'type' => 'check'
+            ]
+        ],
         'ip' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:ratings/Resources/Private/Language/locallang_tca.xlf:tx_ratings_iplog.ip',
@@ -52,7 +62,7 @@ $result = [
         ],
     ],
     'types' => [
-        '0' => ['showitem' => 'reference, crdate, ip']
+        '0' => ['showitem' => 'hidden, crdate, reference, ip']
     ],
     'palettes' => [
         '1' => ['showitem' => '']

@@ -8,6 +8,10 @@ $result = [
         'tstamp'    => 'tstamp',
         'crdate'    => 'crdate',
         'cruser_id' => 'cruser_id',
+        'delete'    => 'deleted',
+        'enablecolumns' => [
+            'disabled' => 'hidden'
+        ],
         'default_sortby' => 'ORDER BY crdate DESC',
         'iconfile'  =>  'EXT:ratings/Resources/Public/Icons/icon_tx_ratings_data.gif'
     ],
@@ -24,6 +28,12 @@ $result = [
                 'eval' => 'datetime,int',
                 'readOnly' => $tx_ratings_debug_mode_disabled,
                 'default' => 0
+            ]
+        ],
+        'hidden' => [
+            'label'  => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
+            'config' => [
+                'type' => 'check'
             ]
         ],
         'reference' => [
@@ -80,7 +90,7 @@ $result = [
     ],
 
     'types' => [
-        '0' => ['showitem' => 'crdate, reference, rating, vote_count']
+        '0' => ['showitem' => 'hidden, crdate, reference, rating, vote_count']
     ],
     'palettes' => [
         '1' => ['showitem' => '']

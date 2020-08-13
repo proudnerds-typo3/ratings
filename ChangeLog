@@ -1,3 +1,7 @@
+2020-08-13 Franz Holzinger <franz@ttproducts.de>
+
+    * new feature: add fields hidden and deleted
+
 2020-08-10 Franz Holzinger <franz@ttproducts.de>
 
     * ready for TYPO3 9.5. QueryBuilder, Coding Guidelines
