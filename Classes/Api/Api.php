@@ -219,7 +219,7 @@ class Api {
         );
 
         $rows = $queryBuilder
-            ->select('rating,vote_count')
+            ->select('rating', 'vote_count')
             ->from($tableName)
             ->where(
                 $queryBuilder->expr()->eq(

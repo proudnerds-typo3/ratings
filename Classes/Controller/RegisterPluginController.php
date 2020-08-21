@@ -95,8 +95,8 @@ class RegisterPluginController extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 
         $api = GeneralUtility::makeInstance(\Netcreators\Ratings\Api\Api::class);
 
-        // adds possibility to change ref and so use this plugin with other plugins and not only pages
-        if ($conf['flexibleRef']) {
+        // adds the possibility to change ref in a more flexible way
+        if ($conf['flexibleRef'] && isset($conf['flexibleRef.'])) {
             $conf['ref'] = $this->cObj->cObjGetSingle($conf['flexibleRef'], $conf['flexibleRef.']);
         }
 

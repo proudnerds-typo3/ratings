@@ -75,7 +75,7 @@ class Ajax {
         }
         $this->pid = $data['pid'];
         if (!MathUtility::canBeInterpretedAsInteger($this->pid)) {
-            echo $tsfe->getLL('bad_pid_value');
+            echo $tsfe->getLL('bad_pid_value') . ' "' . htmlspecialchars($this->pid) . '"');
             exit;
         }
     }
@@ -109,7 +109,7 @@ class Ajax {
             try {
                 // Do everything inside transaction
                 $connection->beginTransaction();
-                $count = $queryBuilder
+                $statement = $queryBuilder
                     ->count('*')
                     ->from($tableName)
                     ->where(
@@ -120,15 +120,21 @@ class Ajax {
                                 \PDO::PARAM_STR
                             )
                         )
-                    )->andWhere(
+                    );
+                
+                if ($this->conf['storagePid']) {
+                    $statement->andWhere(
                         $queryBuilder->expr()->eq(
                             'pid',
                             $queryBuilder->createNamedParameter(
-                                $this->conf['storagePid'](),
+                                $this->conf['storagePid'],
                                 \PDO::PARAM_INT
                             )
                         )
-                    )
+                    );
+                }
+                
+                $count = $statement
                     ->execute()
                     ->fetchColumn(0);
 
