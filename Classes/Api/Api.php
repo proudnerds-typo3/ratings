@@ -25,6 +25,9 @@ namespace Netcreators\Ratings\Api;
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+use TYPO3\CMS\Core\Database\Connection;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
@@ -49,16 +52,14 @@ class Api {
     */
     protected $cObj;
 
-    protected $databaseHandle;
-
     /**
     * Creates an instance of this class
     *
     */
-    public function __construct() {
+    public function __construct()
+    {
         $this->cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
         $this->cObj->start('', '');
-        $this->databaseHandle = $this->getDatabaseConnection();
     }
 
     /**
@@ -69,7 +70,8 @@ class Api {
     * @param	array		$conf	Configuration array
     * @return	float		Rating value (from 0 to 100)
     */
-    public function getRatingValue($ref, $conf = null) {
+    public function getRatingValue($ref, $conf = null)
+    {
         if (is_null($conf)) {
             $conf = $this->getDefaultConfig();
         }
@@ -84,8 +86,13 @@ class Api {
     *
     * @return	array		TypoScript configuration for ratings
     */
-    public function getDefaultConfig() {
-        $result = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_ratings.'];
+    public function getDefaultConfig()
+    {
+        $result = [];
+        $tsfe = $this->getTypoScriptFrontendController();
+        if ($tsfe) {
+            $result = $tsfe->tmpl->setup['plugin.']['tx_ratings.'];
+        }
         return $result;
     }
 
@@ -96,15 +103,18 @@ class Api {
     * @param	array		$conf	Configuration array
     * @return	string		HTML content
     */
-    public function getRatingDisplay($ref, $conf = null) {
+    public function getRatingDisplay($ref, $conf = null)
+    {
+        $tsfe = $this->getTypoScriptFrontendController();
         if (is_null($conf)) {
             $conf = $this->getDefaultConfig();
         }
 
         // Get template
-        if ($GLOBALS['TSFE']) {
+        if ($tsfe) {
             // Normal call
-            $template = $this->cObj->fileResource($conf['templateFile']);
+            $pathFilename = $tsfe->tmpl->getFileName($conf['templateFile']);
+            $template = file_get_contents($pathFilename);
         }
         else {
             // Called from ajax
@@ -124,7 +134,8 @@ class Api {
     *
     * @return	string		Current IP address
     */
-    public function getCurrentIp() {
+    public function getCurrentIp()
+    {
         if (preg_match('/^\d{2,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/', $_SERVER['HTTP_X_FORWARDED_FOR'])) {
             return $_SERVER['HTTP_X_FORWARDED_FOR'];
         }
@@ -137,18 +148,39 @@ class Api {
     * @param	string		$ref	Reference
     * @return	boolean		true if item was voted
     */
-    public function isVoted($ref) {
-        list($rec) =
-            $this->databaseHandle->exec_SELECTgetRows(
-                'COUNT(*) AS t',
-                'tx_ratings_iplog',
-                ' reference=' .
-                    $this->databaseHandle->fullQuoteStr($ref, 'tx_ratings_iplog') .
-                    ' AND ip=' .
-                    $this->databaseHandle->fullQuoteStr($this->getCurrentIp(), 'tx_ratings_iplog') .
-                $this->enableFields('tx_ratings_iplog')
-            );
-        return ($rec['t'] > 0);
+    public function isVoted($ref)
+    {
+        $result = 0;
+        $tableName = 'tx_ratings_iplog';
+        $queryBuilder = $this->getQueryBuilder($tableName);
+        $queryBuilder->setRestrictions(GeneralUtility::makeInstance(
+            \TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer::class)
+        );
+
+        $result = $queryBuilder
+            ->count('*')
+            ->from($tableName)
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'reference',
+                    $queryBuilder->createNamedParameter(
+                        $ref,
+                        \PDO::PARAM_STR
+                    )
+                )
+            )->andWhere(
+                $queryBuilder->expr()->eq(
+                    'ip',
+                    $queryBuilder->createNamedParameter(
+                        $this->getCurrentIp(),
+                        \PDO::PARAM_STR
+                    )
+                )
+            )
+            ->execute()
+            ->fetchColumn(0);
+
+        return $result;
     }
 
 
@@ -159,7 +191,8 @@ class Api {
     * @param    int    $ratingImageWidth  width of the rating image
     * @return   int
     */
-    protected function getBarWidth($rating, $ratingImageWidth) {
+    protected function getBarWidth($rating, $ratingImageWidth)
+    {
         $result = 0;
         if (
             MathUtility::canBeInterpretedAsInteger($ratingImageWidth) &&
@@ -176,17 +209,36 @@ class Api {
     * @param string $ref	Reference in TYPO3 "datagroup" format (i.e. tt_content_10)
     * @return array Array with two values: rating and count, which is calculated rating value and number of votes respectively
     */
-    protected function getRatingInfo($ref) {
-        $recs =
-            $this->databaseHandle->exec_SELECTgetRows(
-                'rating,vote_count',
-                'tx_ratings_data',
-                ' reference=' .
-                    $this->databaseHandle->fullQuoteStr($ref, 'tx_ratings_data') .
-                    $this->enableFields('tx_ratings_data')
-            );
-        return (count($recs) ? $recs[0] : array('rating' => 0, 'vote_count' => 0));
-    }
+    protected function getRatingInfo($ref)
+    {
+        $result = ['rating' => 0, 'vote_count' => 0];
+        $tableName = 'tx_ratings_data';
+        $queryBuilder = $this->getQueryBuilder($tableName);
+        $queryBuilder->setRestrictions(GeneralUtility::makeInstance(
+            \TYPO3\CMS\Core\Database\Query\Restriction\FrontendRestrictionContainer::class)
+        );
+
+        $rows = $queryBuilder
+            ->select('rating', 'vote_count')
+            ->from($tableName)
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'reference',
+                    $queryBuilder->createNamedParameter(
+                        $ref,
+                        \PDO::PARAM_STR
+                    )
+                )
+            )
+            ->setMaxResults(1)
+            ->execute()
+            ->fetchAll();
+
+        if (is_array($rows) && !empty($rows)) {
+            $result = $rows['0'];
+        }
+        return $result;
+}
 
     /**
     * Generates rating content for given $ref using $template HTML template
@@ -196,8 +248,13 @@ class Api {
     * @param	array		$conf	Configuration array
     * @return	string		Generated content
     */
-    protected function generateRatingContent($ref, $template, array $conf) {
+    protected function generateRatingContent($ref, $template, array $conf)
+    {
         $tsfe = $this->getTypoScriptFrontendController();
+        if (!$tsfe) {
+            return '';
+        }
+        $templateService = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Service\MarkerBasedTemplateService::class);
         $siteRelPath = ExtensionManagementUtility::siteRelPath('ratings');
         $rating = $this->getRatingInfo($ref);
         if ($rating['vote_count'] > 0) {
@@ -212,38 +269,38 @@ class Api {
             $conf['mode'] == 'static' ||
             (!$conf['disableIpCheck'] && $this->isVoted($ref))
         ) {
-            $subTemplate = $this->cObj->getSubpart($template, '###TEMPLATE_RATING_STATIC###');
+            $subTemplate = $templateService->getSubpart($template, '###TEMPLATE_RATING_STATIC###');
             $links = '';
         } else {
-            $subTemplate = $this->cObj->getSubpart($template, '###TEMPLATE_RATING###');
-            $voteSub = $this->cObj->getSubpart($template, '###VOTE_LINK_SUB###');
+            $subTemplate = $templateService->getSubpart($template, '###TEMPLATE_RATING###');
+            $voteSub = $templateService->getSubpart($template, '###VOTE_LINK_SUB###');
             // Make ajaxData
             $confCopy = $conf;
             unset($confCopy['userFunc']);
-            $confCopy['templateFile'] = $GLOBALS['TSFE']->tmpl->getFileName($conf['templateFile']);
-            $data = serialize(array(
-                'pid' => $GLOBALS['TSFE']->id,
+            $confCopy['templateFile'] = $tsfe->tmpl->getFileName($conf['templateFile']);
+            $data = serialize([
+                'pid' => $tsfe->id,
                 'conf' => $confCopy,
-                'lang' => $GLOBALS['TSFE']->lang,
-            ));
+                'lang' => $tsfe->lang,
+            ]);
             $ajaxData = base64_encode($data);
             // Create links
             $links = '';
             for ($i = $conf['minValue']; $i <= $conf['maxValue']; $i++) {
                 $check = md5($ref . $i . $ajaxData . $GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey']);
-                $links .= $this->cObj->substituteMarkerArray($voteSub, array(
+                $links .= $templateService->substituteMarkerArray($voteSub, [
                     '###VALUE###' => $i,
                     '###REF###' => $ref,
-                    '###PID###' => $GLOBALS['TSFE']->id,
+                    '###PID###' => $tsfe->id,
                     '###CHECK###' => $check,
                     '###SITE_REL_PATH###' => $siteRelPath,
                     '###AJAX_DATA###' => rawurlencode($ajaxData),
-                ));
+                ]);
             }
         }
 
-        $markers = array(
-            '###PID###' => $GLOBALS['TSFE']->id,
+        $markers = [
+            '###PID###' => $tsfe->id,
             '###REF###' => htmlspecialchars($ref),
             '###TEXT_SUBMITTING###' => $tsfe->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_submitting'),
             '###TEXT_ALREADY_RATED###' => $tsfe->sL('LLL:EXT:ratings/Resources/Private/Language/locallang.xlf:api_already_rated'),
@@ -258,9 +315,9 @@ class Api {
             '###RAW_VOTE###' => $this->cObj->stdWrap($rating['rating'], $conf['ratingVoteStdWrap.']),
             '###RAW_VOTE_MAX###' => $this->cObj->stdWrap($conf['maxValue'], $conf['ratingMaxValueStdWrap.']),
             '###RAW_VOTE_MIN###' => $this->cObj->stdWrap($conf['minValue'], $conf['ratingMinValueStdWrap.']),
-        );
+        ];
 
-        $result = $this->cObj->substituteMarkerArray($subTemplate, $markers);
+        $result = $templateService->substituteMarkerArray($subTemplate, $markers);
         return $result;
     }
 
@@ -270,8 +327,9 @@ class Api {
     * @param	string		$tableName	Table name
     * @return	string		SQL
     */
-    public function enableFields($tableName) {
-        if ($GLOBALS['TSFE']) {
+    public function enableFields($tableName)
+    {
+        if ($this->getTypoScriptFrontendController()) {
             return $this->cObj->enableFields($tableName);
         }
         /* @var $sys_page \TYPO3\CMS\Frontend\Page\PageRepository */
@@ -281,20 +339,30 @@ class Api {
     }
 
     /**
-     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
-     */
-    protected function getDatabaseConnection()
-    {
-        return $GLOBALS['TYPO3_DB'];
-    }
-
-    /**
      * @return TypoScriptFrontendController
      */
     protected function getTypoScriptFrontendController()
     {
         return $GLOBALS['TSFE'];
     }
-}
 
+    /**
+     * @param string $tableName
+     * @return Connection
+     */
+    public static function getConnectionForTable (string $tableName): Connection
+    {
+        return GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($tableName);
+    }
+
+    /**
+     * @param string $tableName
+     * @return QueryBuilder
+     */
+    public function getQueryBuilder (string $tableName)
+    {
+        $result = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($tableName);
+        return $result;
+    }
+}
 

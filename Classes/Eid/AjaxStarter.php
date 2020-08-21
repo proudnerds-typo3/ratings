@@ -5,8 +5,8 @@ namespace Netcreators\Ratings\Eid;
 
 class AjaxStarter {
 
-    public function run () {
-
+    public function run ()
+    {
         \JambageCom\Div2007\Utility\FrontendUtility::init();
 
         $eIDutility = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\Utility\EidUtility::class);

@@ -44,7 +44,8 @@ class TtNews {
     * @param	tx_ttnews	$pObj	Reference to parent object
     * @return	array		Modified marker array
     */
-    public function extraItemMarkerProcessor(array &$markerArray, array $row, $lConf, $pObj) {
+    public function extraItemMarkerProcessor(array &$markerArray, array $row, $lConf, $pObj)
+    {
         /* @var $pObj tx_ttnews */
         if ($row['tx_ratings_enable']) {
             $api = GeneralUtility::makeInstance(\Netcreators\Ratings\Api\Api::class);
@@ -54,12 +55,12 @@ class TtNews {
 
             $cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
             /* @var $cObj \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer */
-            $cObj->start(array());
+            $cObj->start([]);
             $markerArray['###TX_RATINGS###'] = $cObj->cObjGetSingle('USER_INT', $conf);
 
             $cObj = GeneralUtility::makeInstance(\TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer::class);
             /* @var $cObj \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer */
-            $cObj->start(array());
+            $cObj->start([]);
             $conf['mode'] = 'static';
             $markerArray['###TX_RATINGS_STATIC###'] = $cObj->cObjGetSingle('USER_INT', $conf);
         }

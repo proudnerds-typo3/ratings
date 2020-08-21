@@ -30,7 +30,6 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
  */
 class WizardIcon
 {
-
     /**
      * Processes the wizard items array.
      *
@@ -43,11 +42,11 @@ class WizardIcon
         $languageFile = 'Resources/Private/Language/locallang.xlf';
         $params = '&defVals[tt_content][CType]=list&defVals[tt_content][list_type]=ratings_pi';
 
-        $wizardItem = array(
+        $wizardItem = [
             'title' => $GLOBALS['LANG']->sL('LLL:EXT:ratings/' . $languageFile . ':plugins_title'),
             'description' => $GLOBALS['LANG']->sL('LLL:EXT:ratings/' . $languageFile . ':plugins_description'),
             'params' => $params
-        );
+        ];
 
         if (version_compare(TYPO3_version, '7.5', '>=')) {
             $iconIdentifier = 'extensions-ratings-wizard';
@@ -56,9 +55,9 @@ class WizardIcon
             $iconRegistry->registerIcon(
                 $iconIdentifier,
                 'TYPO3\\CMS\\Core\\Imaging\\IconProvider\\BitmapIconProvider',
-                array(
+                [
                     'source' => 'EXT:ratings/' . $wizardIcon,
-                )
+                ]
             );
             $wizardItem['iconIdentifier'] = $iconIdentifier;
         } else {

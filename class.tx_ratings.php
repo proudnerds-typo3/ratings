@@ -35,9 +35,3 @@ class tx_ratings {
     }
 }
 
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ratings/class.tx_ratings.php'])	{
-    /** @noinspection PhpIncludeInspection */
-    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ratings/class.tx_ratings.php']);
-}
-

@@ -6,6 +6,9 @@
 			<trans-unit id="tx_ratings_data" xml:space="preserve">
 				<source>Ratings data</source>
 			</trans-unit>
+			<trans-unit id="tx_ratings_data.crdate" xml:space="preserve">
+				<source>Firstly rated on:</source>
+			</trans-unit>
 			<trans-unit id="tx_ratings_data.reference" xml:space="preserve">
 				<source>Rated item:</source>
 			</trans-unit>
